@@ -511,10 +511,10 @@ tslib@^2.1.0:
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
 
-w3q-deployer@^1.4.1:
-  version "1.4.1"
-  resolved "https://registry.npmjs.org/w3q-deployer/-/w3q-deployer-1.4.1.tgz#285599d6ffd4836f3d0153136302622c51188b97"
-  integrity sha512-ofLnf6knwNfxiwZK1a7cE7M5nHoXz6M4iKiXN8iKttMwJc9/T0o/in5f3nks175DGhBN4VoEw2t/CYy2mR/1nA==
+w3q-deployer@^1.4.2:
+  version "1.4.2"
+  resolved "https://registry.npmjs.org/w3q-deployer/-/w3q-deployer-1.4.2.tgz#c39b8ef7f34d2af82e7211e5c87c06b4f9ec2b53"
+  integrity sha512-9XPtdxdiVK3/2pW7x4rT/rJzUq5+55dfeMjKd5XFCSilJBuJQdvtXSGKgPljR02U70Oadq/9NjCHbc/+obqIgw==
   dependencies:
     colors-cli "^1.0.28"
     eth-ens-namehash "^2.0.8"

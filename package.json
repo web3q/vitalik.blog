@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/QuarkChain/vitalik.blog#readme",
   "dependencies": {
-    "w3q-deployer": "^1.4.1"
+    "w3q-deployer": "^1.4.2"
   }
 }
