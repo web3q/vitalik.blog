@@ -1,6 +1,6 @@
 # Example of Dumping Vitalik's Blogs On-Chain
 ## Steps
-1. Run `git clone git@github.com:QuarkChain/vitalik.blog.git`
+1. Run `git clone git@github.com:web3q/vitalik.blog.git`
 2. Run `cd vitalik.blog`
 3. Run `npm i w3q-deployer`
 4. Create a FlatDirectory contract `npx w3q-deploy --create --privateKey <private-key>`, which should return a contract address
