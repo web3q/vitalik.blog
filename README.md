@@ -13,4 +13,4 @@ Bonus: Do you know how to set up default file so that you could directly browse 
 
 Existing example: https://web3q.io/vitalikblog.eth/ or https://web3q.io/0xd8029dEDb2A16B378aF6D13413a5781ff1a640Da:3334/.
 
-Note: **Make sure to use an unused private key for the experiment**.  If you need tokens to run the experiment, feel free to contact community members in our public channels.
+Note: **Make sure to use an unused private key for the experiment**.  If you need tokens to run the experiment, feel free to contact community members in our public discord/telegram channels.
