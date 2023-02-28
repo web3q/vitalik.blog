@@ -430,6 +430,19 @@ ethers@^5.5.4:
     "@ethersproject/web" "5.6.1"
     "@ethersproject/wordlists" "5.6.1"
 
+ethfs-uploader@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.npmjs.org/ethfs-uploader/-/ethfs-uploader-1.1.8.tgz#d2c5491964b763958ac34367cc6883d3c8b040e7"
+  integrity sha512-YF+8pr1D74FT0YUni2oxckKXneURD1JPmfvLPEYjjVyu1tbuO6jDu2T2nwbqmtWk8iWYy28TV/Gy6jso87aTiw==
+  dependencies:
+    colors-cli "^1.0.28"
+    eth-ens-namehash "^2.0.8"
+    ethers "^5.5.4"
+    fs "^0.0.1-security"
+    js-sha3 "^0.8.0"
+    minimist "^1.2.5"
+    rxjs "^7.5.5"
+
 fs@^0.0.1-security:
   version "0.0.1-security"
   resolved "https://registry.npmjs.org/fs/-/fs-0.0.1-security.tgz#8a7bd37186b6dddf3813f23858b57ecaaf5e41d4"
@@ -510,19 +523,6 @@ tslib@^2.1.0:
   version "2.4.0"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.4.0.tgz#7cecaa7f073ce680a05847aa77be941098f36dc3"
   integrity sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==
-
-w3q-deployer@^1.4.2:
-  version "1.4.2"
-  resolved "https://registry.npmjs.org/w3q-deployer/-/w3q-deployer-1.4.2.tgz#c39b8ef7f34d2af82e7211e5c87c06b4f9ec2b53"
-  integrity sha512-9XPtdxdiVK3/2pW7x4rT/rJzUq5+55dfeMjKd5XFCSilJBuJQdvtXSGKgPljR02U70Oadq/9NjCHbc/+obqIgw==
-  dependencies:
-    colors-cli "^1.0.28"
-    eth-ens-namehash "^2.0.8"
-    ethers "^5.5.4"
-    fs "^0.0.1-security"
-    js-sha3 "^0.8.0"
-    minimist "^1.2.5"
-    rxjs "^7.5.5"
 
 ws@7.4.6:
   version "7.4.6"
