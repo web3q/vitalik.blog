@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
 
 <script type="text/x-mathjax-config">
@@ -50,6 +51,51 @@ MathJax = {
 
 <div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
 
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
 
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="預測市場：一個選舉小故事（2021年 二月）" />
@@ -170,7 +216,7 @@ MathJax = {
 <p>因此，<em>選擇壓力</em>會有利於下注結果正確的人。經過十輪之後，好的預測者會有更多的資本去下注，而壞的預測者會有更少的資本去下注。這<em>不需要</em>任何人在過程中「變得更聰明」或「吸取教訓」，更不需要假設其他人類的推理和學習能力。這僅僅是選擇動力學的結果，隨著時間的推移，善於做出正確猜測的參與者將在生態系統中占據主導地位。</p>
 <p>請注意，預測市場在這方面比股票市場表現得更好：股票市場的 「新貴」往往是來自於某次幸運的千倍收益，這成為了信號中的雜訊，但在預測市場中，價格被限定在0和1之間，限制了任何一個單一事件能帶來的影響。</p>
 <h3 id="參與者更好-技術也更好">參與者更好 技術也更好</h3>
-<p>第二，預測市場本身會有進步。使用者界面已經有了很大的改進，並將繼續進一步完善。MakerDAO-&gt;Foundry-&gt;Catnip現在雖然很複雜，但會被被抽象為單一交易。區塊鏈的擴容技術也會進步，降低參與者的手續費（內建AMM的<a href="https://vitalik.ca/general/2021/01/05/rollup.html">ZK-rollup Loopring</a>已經在Ethereum主網上線，理論上可以在上面跑一個預測市場）。</p>
+<p>第二，預測市場本身會有進步。使用者界面已經有了很大的改進，並將繼續進一步完善。MakerDAO-&gt;Foundry-&gt;Catnip現在雖然很複雜，但會被被抽象為單一交易。區塊鏈的擴容技術也會進步，降低參與者的手續費（內建AMM的<a href="../../../2021/01/05/rollup.html">ZK-rollup Loopring</a>已經在Ethereum主網上線，理論上可以在上面跑一個預測市場）。</p>
 <p>第三，我們看到了預測市場正常運行，這樣的例子會讓參與者比較不害怕。使用者會看到，就算在非常有爭議的情況下Augur預言機還是能給出正確的結果（這次有兩輪爭議，但No的那一方還是乾淨利落的贏了）。來自加密貨幣領域之外的人，看到這樣的成功的例子，也會更願意參與其中。也許連Nate Silver自己都可能弄來一些DAI，並在2022年以後使用Augur、Omen、Polymarket和其他市場來增加自己的收入。</p>
 <p>第四，預測市場技術本身可以改進。<a href="https://ethresear.ch/t/prediction-market-design-for-betting-on-many-highly-improbable-events/8280">這是我自己提出的一個市場設計建議</a>，可以在保持高資本效率的同時，對許多低機率事件下注。這樣能夠防止許多那些低機率事件的賠率偏高。我相信會有其他的想法出現，且我期待看到更多這方面的實驗。</p>
 <h2 id="結論">結論</h2>

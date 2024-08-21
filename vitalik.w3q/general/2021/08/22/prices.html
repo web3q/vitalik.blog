@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
 
 <script type="text/x-mathjax-config">
@@ -50,6 +51,51 @@ MathJax = {
 
 <div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
 
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
 
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Alternatives to selling at below-market-clearing prices for achieving fairness (or community sentiment, or fun)" />
@@ -68,7 +114,7 @@ MathJax = {
 <p><strong>But nevertheless, the fact that below-market-clearing pricing is so prevalent suggests that there must be some convincing reasons why sellers do it.</strong> And indeed, as the research into this topic over the last few decades has shown, there often are. And so it's worth asking the question: are there ways of achieving the same goals with more fairness, less inefficiency and less harm?</p>
 <h2 id="selling-at-below-market-clearing-prices-has-large-inefficiencies-and-negative-externalities">Selling at below market-clearing prices has large inefficiencies and negative externalities</h2>
 <p>If a seller sells an item at market price, or through an auction, someone who <em>really really wants</em> that item has a simple path to getting it: they can pay the high price or if it's an auction they can bid a high amount. If a seller sells the item at below market price, then demand exceeds supply, and so some people will get the item and others won't. But the mechanism deciding who will get the item is decidedly not random, and it's often not well-correlated with how much participants want the item. Sometimes, it involves being faster at clicking buttons than everyone else. At other times, it involves waking up at 2 AM in your timezone (but 11 PM or even 2 PM in someone else's). And at still other times, it just turns into an "auction by other means", one which is more chaotic, less efficient and laden with far more negative externalties.</p>
-<p>Within the Ethereum ecosystem, there are many clear examples of this. First, we can look at the <a href="https://vitalik.ca/general/2017/06/09/sales.html">ICO craze of 2017</a>. In 2017, there were a large number of projects launching initial coin offerings (ICOs), and a typical model was the <strong>capped sale</strong>: the project would set the price of the token and a hard maximum for how many tokens they are willing to sell, and at some point in time the sale would start automatically. Once the number of tokens hit the cap, the sale ends.</p>
+<p>Within the Ethereum ecosystem, there are many clear examples of this. First, we can look at the <a href="../../../2017/06/09/sales.html">ICO craze of 2017</a>. In 2017, there were a large number of projects launching initial coin offerings (ICOs), and a typical model was the <strong>capped sale</strong>: the project would set the price of the token and a hard maximum for how many tokens they are willing to sell, and at some point in time the sale would start automatically. Once the number of tokens hit the cap, the sale ends.</p>
 <p>What's the result? In practice, these sales would often end in as little as 30 seconds. As soon as (or rather, just before) the sale starts, everyone would start sending transactions in to try to get in, offering higher and higher fees to encourage miners to include their transaction first. An auction by another name - except with revenues going to the miners instead of the token seller, and the extremely harmful negative externality of pricing out every other application on-chain while the sale is going on.</p>
 <center>
 <p><br></p>
@@ -80,7 +126,7 @@ MathJax = {
 <p>In more recent times, ICOs have become less popular, but NFTs and NFT sales are now very popular. Unfortunately, the NFT space failed to learn the lessons from 2017; they make fixed-quantity fixed-supply sales just like the ICOs did (eg. see the <code>mint</code> function on lines 97-108 of <a href="https://etherscan.io/address/0xe12edaab53023c75473a5a011bdb729ee73545e8#code">this contract here</a>). What's the result?</p>
 <center>
 <p><br></p>
-<p><img src="../../../../images/prices/basefee_spike.png" style="width:700px" /><br></p>
+<p><img src="../../../../images/prices/basefee_spike.png" style="width:700px" class="padded" /><br></p>
 <p><small><i>And this isn't even the biggest one; some NFT sales have created gas price spikes as high as 2000 gwei.</i></small></p>
 <br>
 </center>
@@ -100,7 +146,7 @@ MathJax = {
 <p>The year is 2021. We have a blockchain. The blockchain contains not just a powerful decentralized finance ecosystem, but also a rapidly growing suite of all kinds of non-financial tools. The blockchain <em>also</em> presents us with a unique opportunity to reset social norms. Uber legitimized surge pricing where decades of economists yelling about "efficiency" failed; surely, blockchains can also be an opportunity to legitimize new uses of mechanism design. And surely, instead of fiddling around with a coarse-grained one-dimensional strategy space of selling at market price versus below market price (with perhaps a second dimension for auction versus fixed-price sale), we could use our more advanced tools to create an approach that more directly solves the problems, with fewer side effects?</p>
 <p>First, let us list the goals. We'll try to cover the cases of (i) ICOs, (ii) NFTs and (iii) conference tickets (really a type of NFT) at the same time; most of the desired properties are shared between the three cases.</p>
 <ol type="1">
-<li><strong>Fairness</strong>: don't completely lock low-income people out of participating, give them at least some chance to get in. For token sales, there's the <a href="https://vitalik.ca/general/2021/07/29/gini.html">not quite identical but related</a> goal of avoiding high initial wealth concentration and having a larger and more diverse initial token holder community.</li>
+<li><strong>Fairness</strong>: don't completely lock low-income people out of participating, give them at least some chance to get in. For token sales, there's the <a href="../../../2021/07/29/gini.html">not quite identical but related</a> goal of avoiding high initial wealth concentration and having a larger and more diverse initial token holder community.</li>
 <li><strong>Don't create races</strong>: avoid creating situations where lots of people are rushing to take the same action and only the first few get in (this is the type of situation that leads to the horrible auctions-by-another-name that we saw above).</li>
 <li><strong>Don't require fine-grained knowledge of market conditions</strong>: the mechanism should work even if the seller has absolutely no idea how much demand there is.</li>
 <li><strong>Fun</strong>: the process of participating in the sale should ideally be interesting and have game-like qualities, but without being frustrating.</li>
@@ -120,7 +166,7 @@ MathJax = {
 <blockquote>
 <p><strong>Mechanism 3</strong> Each participant (verified by proof-of-personhood) can buy <span class="math inline">\(X\)</span> units at a price <span class="math inline">\(P * X^2\)</span>, up to a maximum of <span class="math inline">\(C\)</span> tokens per buyer. <span class="math inline">\(C\)</span> starts at some low number, and then increases over time until enough units are sold.</p>
 </blockquote>
-<p>This mechanism has the particularly interesting property that if you're making a governance token (<a href="https://vitalik.ca/general/2021/08/16/voting3.html">please don't do that</a>; this is purely harm-reduction advice), the quantity allocated to each buyer is theoretically optimal, though of course post-sale transfers will degrade this optimality over time. Mechanisms 2 and 3 seem like they both satisfy all of the above goals, at least to some extent. They're not necessarily perfect and ideal, but they <em>do</em> make good starting points.</p>
+<p>This mechanism has the particularly interesting property that if you're making a governance token (<a href="../../../2021/08/16/voting3.html">please don't do that</a>; this is purely harm-reduction advice), the quantity allocated to each buyer is theoretically optimal, though of course post-sale transfers will degrade this optimality over time. Mechanisms 2 and 3 seem like they both satisfy all of the above goals, at least to some extent. They're not necessarily perfect and ideal, but they <em>do</em> make good starting points.</p>
 <p>There is one remaining issue. For fixed and limited-supply NFTs, you might get the problem that the equilibrium purchased quantity per participant is fractional (in mechanism 2, perhaps <code>number_of_buyers &gt; N</code>, and in mechanism 3, perhaps setting <span class="math inline">\(C = 1\)</span> already leads to enough demand to over-subscribe the sale). In this case, you can sell fractional items by offering lottery tickets: if there are <code>N</code> items to be sold, then if you subscribe you have a chance of <code>N / number_of_buyers</code> that you will actually get the item, and otherwise you get a refund. For a conference, groups that want to go together could be allowed to bundle their lottery tickets to guarantee either all-win or all-lose. Ability to get the item for certain can be sold at auction.</p>
 <center>
 <p><br></p>
@@ -128,7 +174,7 @@ MathJax = {
 <p><small><i>A fun mildly-grey-hat tactic for conference tickets is to disguise the pool being sold at market rate as the bottom tier of "sponsorships". You may end up with a bunch of people's faces on the sponsor board, but... maybe that's fine? After all, EthCC had John Lilic's face on their sponsor board!</i></small></p>
 <br>
 </center>
-<p>In all of these cases, the core of the solution is simple: if you want to be reliably fair to <em>people</em>, then your mechanism should have some input that explicitly measures people. Proof of personhood protocols do this (and if desired can be combined with <a href="https://vitalik.ca/general/2021/01/26/snarks.html">zero knowledge proofs</a> to ensure privacy). Ergo, we should take the efficiency benefits of market and auction-based pricing, and the egalitarian benefits of proof of personhood mechanics, and combine them together.</p>
+<p>In all of these cases, the core of the solution is simple: if you want to be reliably fair to <em>people</em>, then your mechanism should have some input that explicitly measures people. Proof of personhood protocols do this (and if desired can be combined with <a href="../../../2021/01/26/snarks.html">zero knowledge proofs</a> to ensure privacy). Ergo, we should take the efficiency benefits of market and auction-based pricing, and the egalitarian benefits of proof of personhood mechanics, and combine them together.</p>
 <h2 id="answers-to-possible-questions">Answers to possible questions</h2>
 <p><strong>Q:</strong> Wouldn't lots of people who don't even care about your project buy the item through the egalitarian scheme and immediately resell it?</p>
 <p><strong>A:</strong> Initially, probably not. In practice, such meta-games take time to show up. But if/when they do, one possible mitigation is to make them untradeable for some period of time. This actually works because proof-of-personhood identities are untradeable: you can always use your face to claim that your previous account got hacked and the identity corresponding to you, including everything in it, should be moved to a new account.</p>

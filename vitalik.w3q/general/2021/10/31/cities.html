@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
 
 <script type="text/x-mathjax-config">
@@ -50,6 +51,51 @@ MathJax = {
 
 <div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
 
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
 
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Crypto Cities" />
@@ -85,7 +131,7 @@ MathJax = {
 <ul>
 <li><strong>Selling NFTs to fund local art</strong>, starting with an NFT of <a href="https://thisisreno.com/2021/04/mayor-schieve-wants-to-save-the-space-whale-by-turning-it-into-an-nft/">the "Space Whale" sculpture</a> in the middle of the city</li>
 <li><strong>Creating a Reno DAO</strong>, governed by Reno coins that Reno residents would be eligible to receive via an airdrop. The Reno DAO could start to get sources of revenue; one <a href="https://youtu.be/uqXW0Kt-RzU?t=904">proposed idea</a> was the city renting out properties that it owns and the revenue going into a DAO</li>
-<li><strong>Using blockchains to secure all kinds of processes</strong>: blockchain-secured random number generators for casinos, blockchain-secured <a href="https://vitalik.ca/general/2021/05/25/voting2.html">voting</a>, etc.</li>
+<li><strong>Using blockchains to secure all kinds of processes</strong>: blockchain-secured random number generators for casinos, blockchain-secured <a href="../../../2021/05/25/voting2.html">voting</a>, etc.</li>
 </ul>
 <center>
 <p><br></p>
@@ -102,11 +148,11 @@ MathJax = {
 </center>
 <h3 id="citydao">CityDAO</h3>
 <p>CityDAO is the most radical of the experiments: Unlike Miami and Reno, which are existing cities with existing infrastructure to be upgraded and people to be convinced, CityDAO a DAO with legal status under the Wyoming <a href="https://www.jdsupra.com/legalnews/crypto-daos-and-the-wyoming-frontier-9251606/">DAO law</a> (see their docs <a href="https://lh3.googleusercontent.com/Dxf308mA8zXr6ZOinvzgOFcydXV9lzE3ALcVswb70V1Ngaers6_PTDio4UVFxUoh91sm2N_h2QCCSS2JSzaE2ufZRjuLeqQsNyeEMw=s0">here</a>) trying to create entirely new cities from scratch.</p>
-<p>So far, the project is still in its early stages. The team is currently finalizing <a href="https://twitter.com/CityDao/status/1442247714729861121">a purchase</a> of their first plot of land in a <a href="https://www.google.com/maps/place/44%C2%B055&#39;21.9%22N+109%C2%B015&#39;28.0%22W/@44.9215127,-109.2611115,1702m/data=!3m1!1e3!4m5!3m4!1s0x0:0x0!8m2!3d44.92274!4d-109.25779">far-off corner of Wyoming</a>. The plan is to start with this plot of land, and then add other plots of land in the future, to build cities, governed by a DAO and making heavy use of <a href="https://podofjake.com/2021/09/15/78-scott-fitsimones/">radical economic ideas like Harberger taxes</a> to allocate the land, make collective decisions and manage resources. Their DAO is one of the progressive few that is <a href="https://vitalik.ca/general/2021/08/16/voting3.html">avoiding coin voting governance</a>; instead, the governance is a voting scheme based on "citizen" NFTs, and ideas have been floated to further limit votes to one-per-person by using <a href="https://www.proofofhumanity.id/">proof-of-humanity verification</a>. The NFTs are currently being sold to crowdfund the project; you can buy them on OpenSea.</p>
+<p>So far, the project is still in its early stages. The team is currently finalizing <a href="https://twitter.com/CityDao/status/1442247714729861121">a purchase</a> of their first plot of land in a <a href="https://www.google.com/maps/place/44%C2%B055&#39;21.9%22N+109%C2%B015&#39;28.0%22W/@44.9215127,-109.2611115,1702m/data=!3m1!1e3!4m5!3m4!1s0x0:0x0!8m2!3d44.92274!4d-109.25779">far-off corner of Wyoming</a>. The plan is to start with this plot of land, and then add other plots of land in the future, to build cities, governed by a DAO and making heavy use of <a href="https://podofjake.com/2021/09/15/78-scott-fitsimones/">radical economic ideas like Harberger taxes</a> to allocate the land, make collective decisions and manage resources. Their DAO is one of the progressive few that is <a href="../../../2021/08/16/voting3.html">avoiding coin voting governance</a>; instead, the governance is a voting scheme based on "citizen" NFTs, and ideas have been floated to further limit votes to one-per-person by using <a href="https://www.proofofhumanity.id/">proof-of-humanity verification</a>. The NFTs are currently being sold to crowdfund the project; you can buy them on OpenSea.</p>
 <center>
 <p><br></p>
 <p><a href="https://opensea.io/assets/0x495f947276749ce646f68ac8c248420045cb7b5e/23487195805935260354348650824724952235377320432154855752878351301067508033245"></p>
-<p><img src="../../../../images/cities/citydao.png" /></p>
+<p><img src="../../../../images/cities/citydao.png" class="padded" /></p>
 </a>
 </center>
 <p><br></p>
@@ -120,10 +166,10 @@ MathJax = {
 <p>There's a natural fit between blockchains and both of these categories. Anything happening on a blockchain is very easy to publicly verify, with lots of ready-made freely available tools to help people do that. Any application built on a blockchain can immediately plug in to and interface with other applications in the entire global blockchain ecosystem. Blockchain-based systems are efficient in a way that paper is not, and publicly verifiable in a way that centralized computing systems are not - a necessary combination if you want to, say, make a new form of voting that allows citizens to give high-volume real-time feedback on hundreds or thousands of different issues.</p>
 <p>So let's get into the specifics.</p>
 <h3 id="what-are-some-existing-processes-that-blockchains-could-make-more-trusted-and-transparent">What are some existing processes that blockchains could make more trusted and transparent?</h3>
-<p>One simple idea that plenty of people, including government officials around the world, have brought up to me on many occasions is the idea of governments creating a whitelisted internal-use-only stablecoin for tracking internal government payments. Every tax payment from an individual or organization could be tied to a publicly visible on-chain record minting that number of coins (if we want individual tax payment quantities to be private, there are <a href="https://vitalik.ca/general/2021/01/26/snarks.html">zero-knowledge ways</a> to make only the total public but still convince everyone that it was computed correctly). Transfers between departments could be done "in the clear", and the coins would be redeemed only by individual contractors or employees claiming their payments and salaries.</p>
+<p>One simple idea that plenty of people, including government officials around the world, have brought up to me on many occasions is the idea of governments creating a whitelisted internal-use-only stablecoin for tracking internal government payments. Every tax payment from an individual or organization could be tied to a publicly visible on-chain record minting that number of coins (if we want individual tax payment quantities to be private, there are <a href="../../../2021/01/26/snarks.html">zero-knowledge ways</a> to make only the total public but still convince everyone that it was computed correctly). Transfers between departments could be done "in the clear", and the coins would be redeemed only by individual contractors or employees claiming their payments and salaries.</p>
 <center>
 <p><br></p>
-<p><img src="../../../../images/cities/govcoin.png" /></p>
+<p><img src="../../../../images/cities/govcoin.png" class="padded" /></p>
 </center>
 <p><br></p>
 <p>This system could easily be extended. For example, procurement processes for choosing which bidder wins a government contract could largely be done on-chain.</p>
@@ -133,7 +179,7 @@ MathJax = {
 <li><strong>Certificates</strong>, for example cryptographic proofs that some particular individual is a resident of the city, could be done on-chain for added verifiability and security (eg. if such certificates are issued on-chain, it would become obvious if a large number of false certificates are issued). This can be used by all kinds of local-government-issued certificates.</li>
 <li><strong>Asset registries</strong>, for land and other assets, as well as more complicated forms of property ownership such as development rights. Due to the need for courts to be able to make assignments in exceptional situations, these registries will likely never be fully decentralized bearer instruments in the same way that cryptocurrencies are, but putting records on-chain can still make it easier to see what happened in what order in a dispute.</li>
 </ul>
-<p>Eventually, even <strong>voting</strong> could be done on-chain. Here, <a href="https://vitalik.ca/general/2021/05/25/voting2.html">many complexities and dragons loom</a> and it's really important to be careful; a sophisticated solution combining blockchains, zero knowledge proofs and other cryptography is needed to achieve all the desired privacy and security properties. However, if humanity is ever going to move to electronic voting at all, local government seems like the perfect place to start.</p>
+<p>Eventually, even <strong>voting</strong> could be done on-chain. Here, <a href="../../../2021/05/25/voting2.html">many complexities and dragons loom</a> and it's really important to be careful; a sophisticated solution combining blockchains, zero knowledge proofs and other cryptography is needed to achieve all the desired privacy and security properties. However, if humanity is ever going to move to electronic voting at all, local government seems like the perfect place to start.</p>
 <h2 id="what-are-some-radical-economic-and-governance-experiments-that-could-be-interesting">What are some radical economic and governance experiments that could be interesting?</h2>
 <p>But in addition to these kinds of blockchain overlays onto things that governments <em>already</em> do, we can also look at blockchains as an opportunity for governments to make completely <em>new</em> and radical experiments in economics and governance. These are not necessarily final ideas on what I think should be done; they are more initial explorations and suggestions for possible directions. Once an experiment starts, real-world feedback is often by far the most useful variable to determine how the experiment should be adjusted in the future.</p>
 <h3 id="experiment-1-a-more-comprehensive-vision-of-city-tokens">Experiment #1: a more comprehensive vision of city tokens</h3>
@@ -159,7 +205,7 @@ MathJax = {
 </ul>
 <p>But to avoid perverse incentives, it's extremely important to avoid overly depending on one specific idea and instead to have a diverse array of possible revenue sources. <strong>One excellent gold mine of places to give city tokens value, and at the same time experiment with novel governance ideas, is zoning</strong>. If you hold at least Y coins, then you can quadratically vote on the fee that nearby landowners have to pay to bypass zoning restrictions. This hybrid market + direct democracy based approach would be much more efficient than current overly cumbersome permitting processes, and the fee itself would be another source of government revenue. More generally, any of the ideas in the next section could be combined with city tokens to give city token holders more places to use them.</p>
 <h3 id="experiment-2-more-radical-and-participatory-forms-of-governance">Experiment #2: more radical and participatory forms of governance</h3>
-<p>This is where <a href="https://vitalik.ca/general/2018/04/20/radical_markets.html">Radical Markets</a> ideas such as Harberger taxes, <a href="https://vitalik.ca/general/2019/12/07/quadratic.html">quadratic voting and quadratic funding</a> come in. I already brought up some of these ideas in the section above, but you don't have to have a dedicated city token to do them. Some limited government use of quadratic voting and funding has already happened: see the <a href="https://www.wired.com/story/colorado-quadratic-voting-experiment/">Colorado Democratic party</a> and the <a href="https://presidential-hackathon.taiwan.gov.tw/2020/en/">Taiwanese presidential hackathon</a>, as well as not-yet-government-backed experiments like Gitcoin's <a href="http://web.archive.org/web/20210304144119/https://downtownstimulus.com/">Boulder Downtown Stimulus</a>. But we could do more!</p>
+<p>This is where <a href="../../../2018/04/20/radical_markets.html">Radical Markets</a> ideas such as Harberger taxes, <a href="../../../2019/12/07/quadratic.html">quadratic voting and quadratic funding</a> come in. I already brought up some of these ideas in the section above, but you don't have to have a dedicated city token to do them. Some limited government use of quadratic voting and funding has already happened: see the <a href="https://www.wired.com/story/colorado-quadratic-voting-experiment/">Colorado Democratic party</a> and the <a href="https://presidential-hackathon.taiwan.gov.tw/2020/en/">Taiwanese presidential hackathon</a>, as well as not-yet-government-backed experiments like Gitcoin's <a href="http://web.archive.org/web/20210304144119/https://downtownstimulus.com/">Boulder Downtown Stimulus</a>. But we could do more!</p>
 <p>One obvious place where these ideas can have long-term value is giving developers incentives to improve the <strong>aesthetics of buildings</strong> that they are building (see <a href="https://www.bloomberg.com/opinion/articles/2021-10-05/urban-design-why-can-t-we-build-nice-neighborhoods-anymore">here</a>, <a href="https://astralcodexten.substack.com/p/whither-tartaria">here</a>, <a href="https://www.currentaffairs.org/2021/04/when-is-the-revolution-in-architecture-coming">here</a> and <a href="https://twitter.com/noahpinion/status/1287084300542676992?lang=en">here</a> for some recent examples of professional blabbers debating the aesthetics of modern architecture). Harberger taxes and other mechanisms could be used to radically reform <strong>zoning</strong> rules, and blockchains could be used to administer such mechanisms in a more trustworthy and efficient way. Another idea that is more viable in the short term is <strong>subsidizing local businesses</strong>, similar to the Downtown Stimulus but on a larger and more permanent scale. Businesses produce various kinds of positive externalities in their local communities all the time, and those externalities could be more effectively rewarded. <strong>Local news</strong> could be quadratically funded, revitalizing a long-struggling industry. Pricing for <strong>advertisements</strong> could be set based on real-time votes of how much people enjoy looking at each particular ad, encouraging more originality and creativity.</p>
 <p>More democratic feedback (and possibly even <a href="https://www.youtube.com/watch?v=8rb904_OJj0">retroactive</a> democratic feedback!) could plausibly create better incentives in all of these areas. And <strong>21st-century digital democracy through real-time online quadratic voting and funding could plausibly do a much better job than 20th-century democracy, which seems in practice to have been largely characterized by rigid building codes and obstruction at planning and permitting hearings</strong>. And of course, if you're going to use blockchains to secure voting, starting off by doing it with fancy new kinds of votes seems far more safe and politically feasible than re-fitting existing voting systems.</p>
 <center>
@@ -169,6 +215,6 @@ MathJax = {
 </center>
 <h2 id="conclusions">Conclusions</h2>
 <p>There are a lot of worthwhile ideas for cities to experiment with that could be attempted by existing cities or by new cities. New cities of course have the advantage of not having existing residents with existing expectations of how things should be done; but the concept of creating a new city itself is, in modern times, relatively untested. Perhaps the multi-billion-dollar capital pools in the hands of people and projects enthusiastic to try new things could get us over the hump. But even then, existing cities will likely continue to be the place where most people live for the foreseeable future, and existing cities can use these ideas too.</p>
-<p><strong>Blockchains can be very useful in both the more incremental and more radical ideas that were proposed here, even despite the inherently "trusted" nature of a city government.</strong> Running any new or existing mechanism on-chain gives the public an easy ability to verify that everything is following the rules. Public chains are better: the benefits from existing infrastructure for users to independently verify what is going on far outweigh the losses from transaction fees, which are expected to quickly decrease very soon from <a href="https://vitalik.ca/general/2021/01/05/rollup.html">rollups</a> and <a href="https://vitalik.ca/general/2021/04/07/sharding.html">sharding</a>. If strong privacy is required, blockchains can be combined <a href="https://vitalik.ca/general/2021/01/26/snarks.html">zero knowledge cryptography</a> to give privacy and security at the same time.</p>
+<p><strong>Blockchains can be very useful in both the more incremental and more radical ideas that were proposed here, even despite the inherently "trusted" nature of a city government.</strong> Running any new or existing mechanism on-chain gives the public an easy ability to verify that everything is following the rules. Public chains are better: the benefits from existing infrastructure for users to independently verify what is going on far outweigh the losses from transaction fees, which are expected to quickly decrease very soon from <a href="../../../2021/01/05/rollup.html">rollups</a> and <a href="../../../2021/04/07/sharding.html">sharding</a>. If strong privacy is required, blockchains can be combined <a href="../../../2021/01/26/snarks.html">zero knowledge cryptography</a> to give privacy and security at the same time.</p>
 <p><strong>The main trap that governments should avoid is too quickly sacrificing optionality</strong>. An <em>existing</em> city could fall into this trap by launching a bad city token instead of taking things more slowly and launching a good one. A <em>new</em> city could fall into this trap by selling off too much land, sacrificing the entire upside to a small group of early adopters. Starting with self-contained experiments, and taking things slowly on moves that are truly irreversible, is ideal. But at the same time, it's also important to seize the opportunity in the first place. There's a lot that can and should be improved with cities, and a lot of opportunities; despite the challenges, crypto cities broadly are an idea whose time has come.</p>
  </div> 

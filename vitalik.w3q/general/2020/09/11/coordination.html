@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
 
 <script type="text/x-mathjax-config">
@@ -50,6 +51,51 @@ MathJax = {
 
 <div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
 
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
 
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Coordination, Good and Bad" />
@@ -66,9 +112,9 @@ MathJax = {
 <p><em>Special thanks to Karl Floersch and Jinglan Wang for feedback and review</em></p>
 <p>See also:</p>
 <ul>
-<li><a href="https://vitalik.ca/general/2019/04/03/collusion.html">On Collusion</a></li>
-<li><a href="https://vitalik.ca/general/2017/05/08/coordination_problems.html">Engineering Security Through Coordination Problems</a></li>
-<li><a href="https://vitalik.ca/general/2020/08/20/trust.html">Trust Models</a></li>
+<li><a href="../../../2019/04/03/collusion.html">On Collusion</a></li>
+<li><a href="../../../2017/05/08/coordination_problems.html">Engineering Security Through Coordination Problems</a></li>
+<li><a href="../../../2020/08/20/trust.html">Trust Models</a></li>
 <li><a href="https://medium.com/@VitalikButerin/the-meaning-of-decentralization-a0c92b76a274">The Meaning Of Decentralization</a></li>
 </ul>
 <p>Coordination, the ability for large groups of actors to work together for their common interest, is one of the most powerful forces in the universe. It is the difference between a king comfortably ruling a country as an oppressive dictatorship, and the people coming together and overthrowing him. It is the difference between the global temperature going up <a href="https://www.reuters.com/article/us-climate-change-un/global-temperatures-on-track-for-3-5-degree-rise-by-2100-u-n-idUSKCN1NY186">3-5'C</a> and the temperature going up by a much smaller amount if we work together to stop it. And it is the factor that makes companies, countries and any social organization larger than a few people possible at all.</p>
@@ -93,7 +139,7 @@ MathJax = {
 <h3 id="evaluate-intentions-not-actions">Evaluate Intentions, Not Actions (!!)</h3>
 <p>One important property of especially the milder cases of collusion is that one cannot determine whether or not an action is part of an undesired collusion just by looking at the action itself. The reason is that the actions that a person takes are a combination of that person's internal knowledge, goals and preferences together with externally imposed incentives on that person, and so the actions that people take when colluding, versus the actions that people take on their own volition (or coordinating in benign ways) often overlap.</p>
 <p>For example, consider the case of collusion between sellers (a type of <a href="https://en.wikipedia.org/wiki/Antitrust">antitrust violation</a>). If operating independently, each of three sellers might set a price for some product between $5 and $10; the differences within the range reflect difficult-to-see factors such as the seller's internal costs, their own willingness to work at different wages, supply-chain issues and the like. But if the sellers collude, they might set a price between $8 and $13. Once again, the range reflects different possibilities regarding internal costs and other difficult-to-see factors. If you see someone selling that product for $8.75, are they doing something wrong? Without knowing whether or not they coordinated with other sellers, you can't tell! Making a law that says that selling that product for more than $8 would be a bad idea; maybe there are legitimate reasons why prices have to be high at the current time. But making a law against collusion, and successfully enforcing it, gives the ideal outcome - you get the $8.75 price if the price has to be that high to cover sellers' costs, but you don't get that price if the factors driving prices up naturally are low.</p>
-<p>This applies in the bribery and vote selling cases too: it may well be the case that some people vote for the Orange Party legitimately, but others vote for the Orange Party because they were paid to. From the point of view of someone determining the rules for the voting mechanism, they don't know ahead of time whether the Orange Party is good or bad. But what they <em>do</em> know is that a vote where people vote based on their honest internal feelings works reasonably well, but a vote where voters can freely buy and sell their votes works terribly. This is because vote selling has a tragedy-of-the-commons: each voter only gains a small portion of the benefit from voting correctly, but would gain the full bribe if they vote the way the briber wants, and so the required bribe to lure each individual voter is far smaller than the bribe that would actually compensate the population for the costs of whatever policy the briber wants. Hence, votes where vote selling is permitted quickly <a href="https://vitalik.ca/general/2019/04/03/collusion.html">collapse into plutocracy</a>.</p>
+<p>This applies in the bribery and vote selling cases too: it may well be the case that some people vote for the Orange Party legitimately, but others vote for the Orange Party because they were paid to. From the point of view of someone determining the rules for the voting mechanism, they don't know ahead of time whether the Orange Party is good or bad. But what they <em>do</em> know is that a vote where people vote based on their honest internal feelings works reasonably well, but a vote where voters can freely buy and sell their votes works terribly. This is because vote selling has a tragedy-of-the-commons: each voter only gains a small portion of the benefit from voting correctly, but would gain the full bribe if they vote the way the briber wants, and so the required bribe to lure each individual voter is far smaller than the bribe that would actually compensate the population for the costs of whatever policy the briber wants. Hence, votes where vote selling is permitted quickly <a href="../../../2019/04/03/collusion.html">collapse into plutocracy</a>.</p>
 <h3 id="understanding-the-game-theory">Understanding the Game Theory</h3>
 <p>We can zoom further out and look at this from the perspective of game theory. In the version of game theory that focuses on individual choice - that is, the version that assumes that each participant makes decisions independently and that does not allow for the possibility of groups of agents working as one for their mutual benefit, there are <a href="https://en.wikipedia.org/wiki/Nash_equilibrium#Proof_of_existence">mathematical proofs</a> that at least one stable Nash equilibrium must exist in any game. In fact, mechanism designers have a very wide latitude to <a href="https://en.wikipedia.org/wiki/Mechanism_design">"engineer" games</a> to achieve specific outcomes. But in the version of game theory that allows for the possibility of coalitions working together (ie. "colluding"), called <em>cooperative game theory</em>, <a href="https://en.wikipedia.org/wiki/Bondareva%E2%80%93Shapley_theorem">we can prove that</a> there are large classes of games that do not have any stable outcome (called a "<a href="https://en.wikipedia.org/wiki/Core_(game_theory)">core</a>"). In such games, whatever the current state of affairs is, there is always some coalition that can profitably deviate from it.</p>
 <p>One important part of that set of inherently unstable games is <em>majority games</em>. A majority game <a href="https://web.archive.org/web/20180329012328/https://www.math.mcgill.ca/vetta/CS764.dir/Core.pdf">is formally described</a> as a game of agents where any subset of more than half of them can capture a fixed reward and split it among themselves - a setup eerily similar to many situations in corporate governance, politics and many other situations in human life. That is to say, if there is a situation with some fixed pool of resources and some currently established mechanism for distributing those resources, and it's unavoidably possible for 51% of the participants can conspire to seize control of the resources, no matter what the current configuration is there is always some conspiracy that can emerge that would be profitable for the participants. However, that conspiracy would then in turn be vulnerable to potential new conspiracies, possibly including a combination of previous conspirators and victims... and so on and so forth.</p>
@@ -208,7 +254,7 @@ C
 <h3 id="structuring-coordination">Structuring Coordination</h3>
 <p>This all leads us to an interesting view of what it is that people building social systems <em>do</em>. One of the goals of building an effective social system is, in large part, determining <em>the structure of coordination</em>: which groups of people and in what configurations can come together to further their group goals, and which groups cannot?</p>
 <center>
-<img src="../../../../images/coordination/structure.png" style="width:650px" /> <br> <br> <i><small>Different coordination structures, different outcomes</small></i> <br><br>
+<img src="../../../../images/coordination/structure.png" style="width:650px" class="padded" /> <br> <br> <i><small>Different coordination structures, different outcomes</small></i> <br><br>
 </center>
 <p>Sometimes, more coordination is good: it's better when people can work together to collectively solve their problems. At other times, more coordination is dangerous: a subset of participants could coordinate to disenfranchise everyone else. And at still other times, more coordination is necessary for another reason: to enable the broader community to "strike back" against a collusion attacking the system.</p>
 <p>In all three of those cases, there are different mechanisms that can be used to achieve these ends. Of course, it is very difficult to prevent communication outright, and it is very difficult to make coordination perfect. But there are many options in between that can nevertheless have powerful effects.</p>

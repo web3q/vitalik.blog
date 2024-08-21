@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
 
 <script type="text/x-mathjax-config">
@@ -50,6 +51,51 @@ MathJax = {
 
 <div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
 
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
 
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Where to use a blockchain in non-financial applications?" />
@@ -64,7 +110,7 @@ MathJax = {
 <title> Where to use a blockchain in non-financial applications? </title>
 
 <p><em>Special thanks to Shrey Jain and Puja Ohlhaver for substantial feedback and review</em></p>
-<p>Recently, there has been a growing amount of interest in using blockchains for not-just-financial applications. This is a trend that I <a href="https://www.youtube.com/watch?v=oLsb7clrXMQ">have been</a> strongly <a href="https://vitalik.ca/general/2021/09/26/limits.html">in favor</a> of, for <a href="https://vitalik.ca/general/2022/01/26/soulbound.html">various</a> <a href="https://vitalik.ca/general/2021/08/16/voting3.html">reasons</a>. In the last month, Puja Ohlhaver, Glen Weyl and I collaborated on a <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4105763">paper</a> describing a more detailed vision for what could be done with a richer ecosystem of soulbound tokens making claims describing various kinds of relationships. This has led to some discussion, particularly focused on whether or not it makes any sense to use a blockchain in a decentralized identity ecosystem:</p>
+<p>Recently, there has been a growing amount of interest in using blockchains for not-just-financial applications. This is a trend that I <a href="https://www.youtube.com/watch?v=oLsb7clrXMQ">have been</a> strongly <a href="../../../2021/09/26/limits.html">in favor</a> of, for <a href="../../../2022/01/26/soulbound.html">various</a> <a href="../../../2021/08/16/voting3.html">reasons</a>. In the last month, Puja Ohlhaver, Glen Weyl and I collaborated on a <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4105763">paper</a> describing a more detailed vision for what could be done with a richer ecosystem of soulbound tokens making claims describing various kinds of relationships. This has led to some discussion, particularly focused on whether or not it makes any sense to use a blockchain in a decentralized identity ecosystem:</p>
 <ul>
 <li>Kate Sills <a href="https://katelynsills.com/blockchain/soulbound-tokens/">argues for off-chain signed claims</a></li>
 <li>Puja Ohlhaver <a href="https://twitter.com/pujaohlhaver/status/1534256764547375105">responds to Kate Sills</a></li>
@@ -74,7 +120,7 @@ MathJax = {
 <li>Shrey Jain <a href="https://twitter.com/shreyjaineth/status/1534774425236537344">makes a meta-thread</a> containing the above and many other Twitter discussions</li>
 </ul>
 <p>It's worth zooming out and asking a broader question: where does it make sense, in general, to use a blockchain in non-financial applications? Should we move toward a world where even decentralized chat apps work by every message being an on-chain transaction containing the encrypted message? Or, alternatively, are blockchains only good for finance (say, because network effects mean that money has a unique need for a "global view"), with all other applications better done using centralized or more local systems?</p>
-<p>My own view tends to be, like with <a href="https://vitalik.ca/general/2021/05/25/voting2.html">blockchain voting</a>, far from the "blockchain everywhere" viewpoint, but also far from a "blockchain minimalist". I see the value of blockchains in many situations, sometimes for <em>really important</em> goals like trust and censorship resistance but sometimes purely for convenience. This post will attempt to describe some types of situations where blockchains might be useful, especially in the context of identity, and where they are not. <strong>This post is not a complete list and intentionally leaves many things out. The goal is rather to elucidate some common categories.</strong></p>
+<p>My own view tends to be, like with <a href="../../../2021/05/25/voting2.html">blockchain voting</a>, far from the "blockchain everywhere" viewpoint, but also far from a "blockchain minimalist". I see the value of blockchains in many situations, sometimes for <em>really important</em> goals like trust and censorship resistance but sometimes purely for convenience. This post will attempt to describe some types of situations where blockchains might be useful, especially in the context of identity, and where they are not. <strong>This post is not a complete list and intentionally leaves many things out. The goal is rather to elucidate some common categories.</strong></p>
 <h2 id="user-account-key-changes-and-recovery">User account key changes and recovery</h2>
 <p>One of the biggest challenges in a cryptographic account system is the issue of key changes. This can happen in a few cases:</p>
 <ol type="1">
@@ -92,11 +138,11 @@ MathJax = {
 <p>From the point of view of someone coming in later who just receives these two messages, they see that A is no longer used, but they don't know whether "replace A with B" or "replace A with C" has higher priority.</p>
 <center>
 <p><br></p>
-<p><img src="../../../../images/nonfin/keychange.png" /></p>
+<p><img src="../../../../images/nonfin/keychange.png" class="padded" /></p>
 </center>
 <p><br></p>
 <p>This is equivalent to the famous <a href="https://en.wikipedia.org/wiki/Double-spending">double-spend problem</a> in designing decentralized currencies, except instead of the goal being to prevent a previous owner of a coin from being able to send it again, here the goal is to prevent the previous key controlling an account from being able to change the key. <strong>Just like creating a decentralized currency, doing account management in a decentralized way requires something like a blockchain</strong>. A blockchain can timestamp the key change messages, providing common knowledge over whether B or C came first.</p>
-<p>[3] and [4] are harder. In general, my own preferred solution is <a href="https://vitalik.ca/general/2021/01/11/recovery.html">multisig and social recovery wallets</a>, where a group of friends, family members and other contacts can transfer control of your account to a new key if it gets lost or stolen. For critical operations (eg. transferring large quantities of funds, or signing an important contract), participation of this group can also be required.</p>
+<p>[3] and [4] are harder. In general, my own preferred solution is <a href="../../../2021/01/11/recovery.html">multisig and social recovery wallets</a>, where a group of friends, family members and other contacts can transfer control of your account to a new key if it gets lost or stolen. For critical operations (eg. transferring large quantities of funds, or signing an important contract), participation of this group can also be required.</p>
 <p>But this too requires a blockchain. Social recovery using <a href="https://en.wikipedia.org/wiki/Shamir%27s_Secret_Sharing">secret sharing</a> is possible, but it is more difficult in practice: if you no longer trust some of your contacts, or if they want to change their own keys, you have no way to revoke access without changing your key yourself. And so we're back to requiring some form of on-chain record.</p>
 <p>One subtle but important idea in <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4105763">the DeSoc paper</a> is that to preserve non-transferability, social recovery (or "community recovery") of profiles might actually need to be <em>mandatory</em>. That is, even if you sell your account, you can always use community recovery to get the account back. This would solve problems like not-actually-reputable drivers <a href="https://restofworld.org/2020/stat-of-the-day/nigeria-bolt-driver-accounts/">buying verified accounts</a> on ride sharing platforms. That said, this is a speculative idea and does not have to be fully implemented to get the other benefits of blockchain-based identity and reputation systems.</p>
 <p><strong>Note that so far this is a limited use-case of blockchains: it's totally okay to have accounts on-chain but do everything else off-chain</strong>. There's a place for these kinds of hybrid visions; <a href="https://login.xyz/">Sign-in With Ethereum</a> is good simple example of how this could be done in practice.</p>
@@ -108,7 +154,7 @@ MathJax = {
 <h2 id="negative-reputation">Negative reputation</h2>
 <p>Another important area where off-chain signatures do not suffice is <strong>negative reputation</strong> - that is, attestations where the person or organization that you're making attestations about might not want you to see them. I'm using "negative reputation" here as a technical term: the most obvious motivating use case is attestations saying bad things about someone, like a bad review or a report that someone acted abusively in some context, but there are also use cases where "negative" attestations don't imply bad behavior - for example, taking out a loan and wanting to prove that you have not taken out too many other loans at the same time.</p>
 <p>With off-chain claims, you can do <em>positive</em> reputation, because it's in the interest of the recipient of a claim to show it to appear more reputable (or make a ZK-proof about it), but you can't do <em>negative</em> reputation, because someone can always choose to only show the claims that make them look good and leave out all the others.</p>
-<p>Here, making attestations on-chain actually does fix things. To protect privacy, we can add encryption and zero knowledge proofs: an attestation can just be an on-chain record with data encrypted to the recipient's public key, and users could prove lack of negative reputation by running a zero knowledge proof that walks over the entire history of records on chain. The proofs being on-chain and the verification process being blockchain-aware makes it easy to verify that the proof actually did walk over the <em>whole</em> history and did not skip any records. To make this computationally feasible, a user could use <a href="https://eprint.iacr.org/2019/1407">incrementally verifiable computation</a> (eg. <a href="https://vitalik.ca/general/2021/11/05/halo.html">Halo</a>) to maintain and prove a tree of records that were encrypted to them, and then reveal parts of the tree when needed.</p>
+<p>Here, making attestations on-chain actually does fix things. To protect privacy, we can add encryption and zero knowledge proofs: an attestation can just be an on-chain record with data encrypted to the recipient's public key, and users could prove lack of negative reputation by running a zero knowledge proof that walks over the entire history of records on chain. The proofs being on-chain and the verification process being blockchain-aware makes it easy to verify that the proof actually did walk over the <em>whole</em> history and did not skip any records. To make this computationally feasible, a user could use <a href="https://eprint.iacr.org/2019/1407">incrementally verifiable computation</a> (eg. <a href="../../../2021/11/05/halo.html">Halo</a>) to maintain and prove a tree of records that were encrypted to them, and then reveal parts of the tree when needed.</p>
 <p>Negative reputation and revoking attestations are in some sense equivalent problems: you can revoke an attestation by adding another negative-reputation attestation saying "this other attestation doesn't count anymore", and you can implement negative reputation with revocation by piggybacking on positive reputation: Alice's degree at Example College could be revoked and replaced with a degree saying "Alice got a degree in example studies, but she took out a loan".</p>
 <h3 id="is-negative-reputation-a-good-idea">Is negative reputation a good idea?</h3>
 <p>One critique of negative reputation that we sometimes hear is: but isn't negative reputation a dystopian scheme of "<em>scarlet letters</em>", and shouldn't we try our best to do things with positive reputation instead?</p>
@@ -122,8 +168,9 @@ MathJax = {
 <p>An even more effective usecase is many-at-a-time issuance: if an artists wants to issue N copies of a "limited-edition" NFT, they could publish on-chain a <em>single</em> hash containing the Merkle root of the NFTs that they are issuing. The single issuance prevents them from issuing more after the fact, and you can publish the number (eg. 100) signifying the quantity limit along with the Merkle root, signifying that only the leftmost 100 Merkle branches are valid.</p>
 <center>
 <p><br></p>
-<p><small><img src="../../../../images/nonfin/merkle.png" /></small></p>
+<p><img src="../../../../images/nonfin/merkle.png" class="padded" /> <small><i></p>
 <p>By publishing a single Merkle root and max count on-chain, you can commit issue a limited quantity of attestations. In this example, there are only five possible valid Merkle branches that could satisfy the proof check. Astute readers may notice a conceptual similarity to <a href="https://ethereum.org/en/developers/docs/scaling/plasma/">Plasma chains</a>.</p>
+<p></i></small></p>
 </center>
 <p><br></p>
 <h2 id="common-knowledge">Common knowledge</h2>
@@ -131,18 +178,18 @@ MathJax = {
 <p>Common knowledge is often important for coordination. For example, a group of people might want to speak out about an issue, but only feel comfortable doing so if there's enough of them speaking out at the same time that they have safety in numbers. One possible way to do this is for one person to start a "commitment pool" around a particular statement, and invite others to publish hashes (which are private at first) denoting their agreement. Only if enough people participate within some period of time, all participants would be required to have their next on-chain message publicly reveal their position.</p>
 <p>A design like this could be accomplished with a combination of zero knowledge proofs and blockchains (it could be done without blockchains, but that requires either <a href="https://eprint.iacr.org/2013/258.pdf">witness encryption</a>, which is not yet available, or <a href="https://en.wikipedia.org/wiki/Trusted_Computing">trusted hardware</a>, which has deeply problematic security assumptions). There is a large design space around these kinds of ideas that is very underexplored today, but could easily start to grow once the ecosystem around blockchains and cryptographic tools grows further.</p>
 <h2 id="interoperability-with-other-blockchain-applications">Interoperability with other blockchain applications</h2>
-<p>This is an easy one: some things should be on-chain to better interoperate with other on-chain applications. Proof of humanity being an on-chain NFT makes it easier projects to automatically airdrop or give governance rights to accounts that have proof of humanity profiles. Oracle data being on-chain makes it easier for defi projects to read. In all of these cases, the blockchain does not remove the need for trust, though it can house structures like DAOs that manage the trust. But the main value that being on-chain provides is simply <em>being in the same place as the stuff that you're interacting with, which needs a blockchain for other reasons</em>.</p>
+<p>This is an easy one: some things should be on-chain to better interoperate with other on-chain applications. Proof of humanity being an on-chain NFT makes it easier for projects to automatically airdrop or give governance rights to accounts that have proof of humanity profiles. Oracle data being on-chain makes it easier for defi projects to read. In all of these cases, the blockchain does not remove the need for trust, though it can house structures like DAOs that manage the trust. But the main value that being on-chain provides is simply <em>being in the same place as the stuff that you're interacting with, which needs a blockchain for other reasons</em>.</p>
 <p>Sure, you <em>could</em> run an oracle off-chain and require the data to be imported only when it needs to be read, but in many cases that would actually be <em>more</em> expensive, and needlessly impose complexity and costs on developers.</p>
 <h2 id="open-source-metrics">Open-source metrics</h2>
 <p>One key goal of the <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4105763">Decentralized Society paper</a> is the idea that it should be possible to <em>make calculations</em> over the graph of attestations. A really important one is <strong>measuring decentralization</strong> and diversity. For example, many people <a href="https://twitter.com/VitalikButerin/status/1264948490834247681">seem</a> to <a href="https://twitter.com/VitalikButerin/status/1265252184813420544">agree</a> that an ideal voting mechanism would somehow keep diversity in mind, giving greater weight to projects that are supported not just by the largest number of <em>coins</em> or even <em>humans</em>, but by the largest number of <em>truly distinct perspectives</em>.</p>
 <center>
 <p><br></p>
-<table>
-<tr style="border:none">
-<td style="border:none">
+<table class="transparent">
+<tr>
+<td>
 <p><img src="../../../../images/nonfin/tweet1.png" /></p>
 </td>
-<td style="border:none">
+<td>
 <p><img src="../../../../images/nonfin/tweet2.png" /></p>
 </td>
 </tr>
@@ -182,6 +229,6 @@ MathJax = {
 <h2 id="conclusions">Conclusions</h2>
 <p>Out of the above list, the two I am personally by far the most confident about are <strong>interoperability with other blockchain applications</strong> and <strong>account management</strong>. The first is on-chain already, and the second is relatively cheap (need to use the chain once per user, and not once per action), the case for it is clear, and there really isn't a good non-blockchain-based solution.</p>
 <p><strong>Negative reputation</strong> and <strong>revocations</strong> are also important, though they are still relatively early-stage use cases. A lot can be done with reputation by relying on off-chain positive reputation only, but I expect that the case for revocation and negative reputation will become more clear over time. I expect there to be attempts to do it with centralized servers, but over time it should become clear that blockchains are the only way to avoid a hard choice between inconvenience and centralization.</p>
-<p><strong>Blockchains as data stores</strong> for short text records may be marginal or may be significant, but I do expect at least some of that kind of usage to keep happening. Blockchains really are just incredibly convenient for cheap and reliable data retrieval, where data continues to be retrievable whether the application has two users or two million. <strong>Open-source metrics</strong> are still a very early-stage idea, and it remainds to see just how much can be done and made open without it becoming exploitable (as eg. online reviews, social media karma and the like get exploited all the time). And <strong>common knowledge games</strong> require convincing people to accept entirely new workflows for socially important things, so of course that is an early-stage idea too.</p>
+<p><strong>Blockchains as data stores</strong> for short text records may be marginal or may be significant, but I do expect at least some of that kind of usage to keep happening. Blockchains really are just incredibly convenient for cheap and reliable data retrieval, where data continues to be retrievable whether the application has two users or two million. <strong>Open-source metrics</strong> are still a very early-stage idea, and it remains to see just how much can be done and made open without it becoming exploitable (as eg. online reviews, social media karma and the like get exploited all the time). And <strong>common knowledge games</strong> require convincing people to accept entirely new workflows for socially important things, so of course that is an early-stage idea too.</p>
 <p>I have a large degree of uncertainty in exactly what level of non-financial blockchain usage in each of these categories makes sense, but it seems clear that blockchains as an enabling tool in these areas should not be dismissed.</p>
- </div>
+ </div> 

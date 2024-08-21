@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
 
 <script type="text/x-mathjax-config">
@@ -50,6 +51,51 @@ MathJax = {
 
 <div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
 
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
 
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="STARKs, Part 3: Into the Weeds" />
@@ -73,14 +119,14 @@ div.foo:hover {
     color: black;
 }
 </style>
-<p>As a followup to <a href="https://vitalik.ca/general/2017/11/09/starks_part_1.html">Part 1</a> and <a href="https://vitalik.ca/general/2017/11/22/starks_part_2.html">Part 2</a> of this series, this post will cover what it looks like to actually implement a STARK, complete with an implementation in python. STARKs ("Scalable Transparent ARgument of Knowledge" are a technique for creating a proof that <span class="math inline">\(f(x)=y\)</span> where <span class="math inline">\(f\)</span> may potentially take a very long time to calculate, but where the proof can be verified very quickly. A STARK is "doubly scalable": for a computation with <span class="math inline">\(t\)</span> steps, it takes roughly <span class="math inline">\(O(t \cdot \log{t})\)</span> steps to produce a proof, which is likely optimal, and it takes ~<span class="math inline">\(O(\log^2{t})\)</span> steps to verify, which for even moderately large values of <span class="math inline">\(t\)</span> is much faster than the original computation. STARKs can also have a privacy-preserving "zero knowledge" property, though the use case we will apply them to here, making verifiable delay functions, does not require this property, so we do not need to worry about it.</p>
+<p>As a followup to <a href="../../../2017/11/09/starks_part_1.html">Part 1</a> and <a href="../../../2017/11/22/starks_part_2.html">Part 2</a> of this series, this post will cover what it looks like to actually implement a STARK, complete with an implementation in python. STARKs ("Scalable Transparent ARgument of Knowledge" are a technique for creating a proof that <span class="math inline">\(f(x)=y\)</span> where <span class="math inline">\(f\)</span> may potentially take a very long time to calculate, but where the proof can be verified very quickly. A STARK is "doubly scalable": for a computation with <span class="math inline">\(t\)</span> steps, it takes roughly <span class="math inline">\(O(t \cdot \log{t})\)</span> steps to produce a proof, which is likely optimal, and it takes ~<span class="math inline">\(O(\log^2{t})\)</span> steps to verify, which for even moderately large values of <span class="math inline">\(t\)</span> is much faster than the original computation. STARKs can also have a privacy-preserving "zero knowledge" property, though the use case we will apply them to here, making verifiable delay functions, does not require this property, so we do not need to worry about it.</p>
 <p>First, some disclaimers:</p>
 <ul>
 <li>This code has not been thoroughly audited; soundness in production use cases is not guaranteed</li>
 <li>This code is very suboptimal (it's written in Python, what did you expect)</li>
 <li>STARKs "in real life" (ie. as implemented in Eli and co's production implementations) tend to use binary fields and not prime fields for application-specific efficiency reasons; however, they do stress in their writings the prime field-based approach to STARKs described here is legitimate and can be used</li>
 <li>There is no "one true way" to do a STARK. It's a broad category of cryptographic and mathematical constructs, with different setups optimal for different applications and constant ongoing research to reduce prover and verifier complexity and improve soundness.</li>
-<li>This article absolutely expects you to know how modular arithmetic and prime fields work, and be comfortable with the concepts of polynomials, interpolation and evaluation. If you don't, go back to <a href="https://vitalik.ca/general/2017/11/22/starks_part_2.html">Part 2</a>, and also this <a href="https://medium.com/@VitalikButerin/quadratic-arithmetic-programs-from-zero-to-hero-f6d558cea649">earlier post on quadratic arithmetic programs</a></li>
+<li>This article absolutely expects you to know how modular arithmetic and prime fields work, and be comfortable with the concepts of polynomials, interpolation and evaluation. If you don't, go back to <a href="../../../2017/11/22/starks_part_2.html">Part 2</a>, and also this <a href="https://medium.com/@VitalikButerin/quadratic-arithmetic-programs-from-zero-to-hero-f6d558cea649">earlier post on quadratic arithmetic programs</a></li>
 </ul>
 <p>Now, let's get to it.</p>
 <h3 id="mimc">MIMC</h3>
@@ -93,13 +139,13 @@ div.foo:hover {
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    <span class="cf">return</span> inp</span></code></pre></div>
 <p>We choose MIMC (see <a href="https://eprint.iacr.org/2016/492.pdf">paper</a>) as the example because it is both (i) simple to understand and (ii) interesting enough to be useful in real life. The function can be viewed visually as follows:</p>
 <center>
-<img src="../../../../images/starks-part-3-files/MIMC.png" /><br> <br> <small><i>Note: in many discussions of MIMC, you will typically see XOR used instead of +; this is because MIMC is typically done over binary fields, where addition <em>is</em> XOR; here we are doing it over prime fields.</i></small>
+<img src="../../../../images/starks-part-3-files/MIMC.png" class="padded" /><br> <br> <small><i>Note: in many discussions of MIMC, you will typically see XOR used instead of +; this is because MIMC is typically done over binary fields, where addition <em>is</em> XOR; here we are doing it over prime fields.</i></small>
 </center>
 <p><br></p>
 <p>In our example, the round constants will be a relatively small list (eg. 64 items) that gets cycled through over and over again (that is, after <code>k[64]</code> it loops back to using <code>k[1]</code>).</p>
 <p>MIMC with a very large number of rounds, as we're doing here, is useful as a <em>verifiable delay function</em> - a function which is difficult to compute, and particularly non-parallelizable to compute, but relatively easy to verify. MIMC by itself achieves this property to some extent because MIMC <em>can</em> be computed "backward" (recovering the "input" from its corresponding "output"), but computing it backward takes about 100 times longer to compute than the forward direction (and neither direction can be significantly sped up by parallelization). So you can think of computing the function in the backward direction as being the act of "computing" the non-parallelizable proof of work, and computing the function in the forward direction as being the process of "verifying" it.</p>
 <center>
-<img src="../../../../images/starks-part-3-files/MIMC2.png" /><br> <br> <small><i><span class="math inline">\(x \rightarrow x^{(2p-1)/3}\)</span> gives the inverse of <span class="math inline">\(x \rightarrow x^3\)</span>; this is true because of <a href="https://en.wikipedia.org/wiki/Fermat%27s_little_theorem">Fermat's Little Theorem</a>, a theorem that despite its supposed littleness is arguably much more important to mathematics than Fermat's more famous "Last Theorem".</i></small>
+<img src="../../../../images/starks-part-3-files/MIMC2.png" class="padded" /><br> <br> <small><i><span class="math inline">\(x \rightarrow x^{(2p-1)/3}\)</span> gives the inverse of <span class="math inline">\(x \rightarrow x^3\)</span>; this is true because of <a href="https://en.wikipedia.org/wiki/Fermat%27s_little_theorem">Fermat's Little Theorem</a>, a theorem that despite its supposed littleness is arguably much more important to mathematics than Fermat's more famous "Last Theorem".</i></small>
 </center>
 <p><br></p>
 <p>What we will try to achieve here is to make verification much more efficient by using a STARK - instead of the verifier having to run MIMC in the forward direction themselves, the prover, after completing the computation in the "backward direction", would compute a STARK of the computation in the "forward direction", and the verifier would simply verify the STARK. The hope is that the overhead of computing a STARK can be less than the difference in speed running MIMC forwards relative to backwards, so a prover's time would still be dominated by the initial "backward" computation, and not the (highly parallelizable) STARK computation. Verification of a STARK can be relatively fast (in our python implementation, ~0.05-0.3 seconds), no matter how long the original computation is.</p>
@@ -134,7 +180,7 @@ div.foo:hover {
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true"></a>    <span class="cf">return</span> lm <span class="op">%</span> <span class="va">self</span>.modulus</span></code></pre></div>
 <p>The above algorithm is relatively expensive; fortunately, for the special case where we need to do many modular inverses, there's a simple mathematical trick that allows us to compute many inverses, called <a href="https://books.google.com/books?id=kGu4lTznRdgC&amp;pg=PA54&amp;lpg=PA54&amp;dq=montgomery+batch+inversion&amp;source=bl&amp;ots=tPJcPPOrCe&amp;sig=Z3p_6YYwYloRU-f1K-nnv2D8lGw&amp;hl=en&amp;sa=X&amp;ved=0ahUKEwjO8sumgJjcAhUDd6wKHWGNA9cQ6AEIRDAE#v=onepage&amp;q=montgomery%20batch%20inversion&amp;f=false">Montgomery batch inversion</a>:</p>
 <center>
-<img src="../../../../images/starks-part-3-files/MultiInv.png" /><br> <br> <small><i>Using Montgomery batch inversion to compute modular inverses. Inputs purple, outputs green, multiplication gates black; the red square is the <b>only</b> modular inversion.</i></small>
+<img src="../../../../images/starks-part-3-files/MultiInv.png" class="padded" /><br> <br> <small><i>Using Montgomery batch inversion to compute modular inverses. Inputs purple, outputs green, multiplication gates black; the red square is the <b>only</b> modular inversion.</i></small>
 </center>
 <p><br></p>
 <p>The code below implements this algorithm, with some slightly ugly special case logic so that if there are zeroes in the set of what we are inverting, it sets their inverse to 0 and moves along.</p>
@@ -235,12 +281,12 @@ div.foo:hover {
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>[<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">2</span>, <span class="dv">6</span>]</span></code></pre></div>
 <p>A Fourier transform takes as input <code>[x[0] .... x[n-1]]</code>, and its goal is to output <code>x[0] + x[1] + ... + x[n-1]</code> as the first element, <code>x[0] + x[1] * 2 + ... + x[n-1] * w**(n-1)</code> as the second element, etc etc; a fast Fourier transform accomplishes this by splitting the data in half, doing an FFT on both halves, and then gluing the result back together.</p>
 <center>
-<img src="../../../../images/starks-part-3-files/radix2fft.png" /><br><br> <small><i>A diagram of how information flows through the FFT computation. Notice how the FFT consists of a "gluing" step followed by two copies of the FFT on two halves of the data, and so on recursively until you're down to one element.</i></small>
+<img src="../../../../images/starks-part-3-files/radix2fft.png" class="padded" /><br><br> <small><i>A diagram of how information flows through the FFT computation. Notice how the FFT consists of a "gluing" step followed by two copies of the FFT on two halves of the data, and so on recursively until you're down to one element.</i></small>
 </center>
 <p><br></p>
 <p>I recommend <a href="http://web.cecs.pdx.edu/~maier/cs584/Lectures/lect07b-11-MG.pdf">this</a> for more intuition on how or why the FFT works and polynomial math in general, and <a href="https://dsp.stackexchange.com/questions/41558/what-are-some-of-the-differences-between-dft-and-fft-that-make-fft-so-fast?rq=1">this thread</a> for some more specifics on DFT vs FFT, though be warned that most literature on Fourier transforms talks about Fourier transforms over <em>real and complex numbers</em>, not <em>prime fields</em>. If you find this too hard and don't want to understand it, just treat it as weird spooky voodoo that just works because you ran the code a few times and verified that it works, and you'll be fine too.</p>
 <h3 id="thank-goodness-its-fri-day-thats-fast-reed-solomon-interactive-oracle-proofs-of-proximity">Thank Goodness It's FRI-day (that's "Fast Reed-Solomon Interactive Oracle Proofs of Proximity")</h3>
-<p><em><strong>Reminder</strong>: now may be a good time to review and re-read <a href="https://vitalik.ca/general/2017/11/22/starks_part_2.html">Part 2</a></em></p>
+<p><em><strong>Reminder</strong>: now may be a good time to review and re-read <a href="../../../2017/11/22/starks_part_2.html">Part 2</a></em></p>
 <p>Now, we'll get into <a href="https://github.com/ethereum/research/blob/master/mimc_stark/fri.py">the code</a> for making a low-degree proof. To review, a low-degree proof is a (probabilistic) proof that at least some high percentage (eg. 80%) of a given set of values represent the evaluations of some specific polynomial whose degree is much lower than the number of values given. Intuitively, just think of it as a proof that "some Merkle root that we claim represents a polynomial actually does represent a polynomial, possibly with a few errors". As input, we have:</p>
 <ul>
 <li>A set of values that we claim are the evaluation of a low-degree polynomial</li>
@@ -248,21 +294,21 @@ div.foo:hover {
 <li>A value <span class="math inline">\(N\)</span> such that we are proving the degree of the polynomial is <em>strictly less than</em> <span class="math inline">\(N\)</span></li>
 <li>The modulus</li>
 </ul>
-<p>Our approach is a recursive one, with two cases. First, if the degree is low enough, we just provide the entire list of values as a proof; this is the "base case". Verification of the base case is trivial: do an FFT or Lagrange interpolation or whatever else to interpolate the polynomial representing those values, and verify that its degree is <span class="math inline">\(&lt; N\)</span>. Otherwise, if the degree is higher than some set minimum, we do the vertical-and-diagonal trick described <a href="https://vitalik.ca/general/2017/11/22/starks_part_2.html">at the bottom of Part 2</a>.</p>
+<p>Our approach is a recursive one, with two cases. First, if the degree is low enough, we just provide the entire list of values as a proof; this is the "base case". Verification of the base case is trivial: do an FFT or Lagrange interpolation or whatever else to interpolate the polynomial representing those values, and verify that its degree is <span class="math inline">\(&lt; N\)</span>. Otherwise, if the degree is higher than some set minimum, we do the vertical-and-diagonal trick described <a href="../../../2017/11/22/starks_part_2.html">at the bottom of Part 2</a>.</p>
 <p>We start off by putting the values into a Merkle tree and using the Merkle root to select a pseudo-random x coordinate (<code>special_x</code>). We then calculate the "column":</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="co"># Calculate the set of x coordinates</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>xs <span class="op">=</span> get_power_cycle(root_of_unity, modulus)</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>column <span class="op">=</span> []</span>
 <span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(xs)<span class="op">//</span><span class="dv">4</span>):</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>    x_poly <span class="op">=</span> f.lagrange_interp_4( </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>    x_poly <span class="op">=</span> f.lagrange_interp_4(</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>        [xs[i<span class="op">+</span><span class="bu">len</span>(xs)<span class="op">*</span>j<span class="op">//</span><span class="dv">4</span>] <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>)],</span>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a>        [values[i<span class="op">+</span><span class="bu">len</span>(values)<span class="op">*</span>j<span class="op">//</span><span class="dv">4</span>] <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">4</span>)],</span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true"></a>    )</span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true"></a>    column.append(f.eval_poly_at(x_poly, special_x))</span></code></pre></div>
 <p>This packs a lot into a few lines of code. The broad idea is to re-interpret the polynomial <span class="math inline">\(P(x)\)</span> as a polynomial <span class="math inline">\(Q(x, y)\)</span>, where <span class="math inline">\(P(x) = Q(x, x^4)\)</span>. If <span class="math inline">\(P\)</span> has degree <span class="math inline">\(&lt; N\)</span>, then <span class="math inline">\(P&#39;(y) = Q(special\_x, y)\)</span> will have degree <span class="math inline">\(&lt; \frac{N}{4}\)</span>. Since we don't want to take the effort to actually compute <span class="math inline">\(Q\)</span> in coefficient form (that would take a still-relatively-nasty-and-expensive FFT!), we instead use another trick. For any given value of <span class="math inline">\(x^{4}\)</span>, there are 4 corresponding values of <span class="math inline">\(x\)</span>: <span class="math inline">\(x\)</span>, <span class="math inline">\(modulus - x\)</span>, and <span class="math inline">\(x\)</span> multiplied by the two modular square roots of <span class="math inline">\(-1\)</span>. So we already have four values of <span class="math inline">\(Q(?, x^4)\)</span>, which we can use to interpolate the polynomial <span class="math inline">\(R(x) = Q(x, x^4)\)</span>, and from there calculate <span class="math inline">\(R(special\_x) = Q(special\_x, x^4) = P&#39;(x^4)\)</span>. There are <span class="math inline">\(\frac{N}{4}\)</span> possible values of <span class="math inline">\(x^{4}\)</span>, and this lets us easily calculate all of them.</p>
 <center>
-<img src="../../../../images/starks-part-3-files/fri7.png" style="width:550px"/><br><br> <small><i>A diagram from part 2; it helps to keep this in mind when understanding what's going on here</i></small>
+<img src="../../../../images/starks-part-3-files/fri7.png" style="width:550px" class="padded" /><br><br> <small><i>A diagram from part 2; it helps to keep this in mind when understanding what's going on here</i></small>
 </center>
 <p><br></p>
 <p>Our proof consists of some number (eg. 40) of random queries from the list of values of <span class="math inline">\(x^{4}\)</span> (using the Merkle root of the column as a seed), and for each query we provide Merkle branches of the five values of <span class="math inline">\(Q(?, x^4)\)</span>:</p>
@@ -280,7 +326,7 @@ div.foo:hover {
 <p>The verifier's job will be to verify that these five values actually do lie on the same degree <span class="math inline">\(&lt; 4\)</span> polynomial. From there, we recurse and do an FRI on the column, verifying that the column actually does have degree <span class="math inline">\(&lt; \frac{N}{4}\)</span>. That really is all there is to FRI.</p>
 <p>As a challenge exercise, you could try creating low-degree proofs of polynomial evaluations that have errors in them, and see how many errors you can get away passing the verifier with (hint, you'll need to modify the <code>prove_low_degree</code> function; with the default prover, even one error will balloon up and cause verification to fail).</p>
 <h3 id="the-stark">The STARK</h3>
-<p><em><strong>Reminder</strong>: now may be a good time to review and re-read <a href="https://vitalik.ca/general/2017/11/09/starks_part_1.html">Part 1</a></em></p>
+<p><em><strong>Reminder</strong>: now may be a good time to review and re-read <a href="../../../2017/11/09/starks_part_1.html">Part 1</a></em></p>
 <p>Now, we get to the actual meat that puts all of these pieces together: <code>def mk_mimc_proof(inp, steps, round_constants)</code> (code <a href="https://github.com/ethereum/research/blob/master/mimc_stark/mimc_stark.py">here</a>), which generates a proof of the execution result of running the MIMC function with the given input for some number of steps. First, some asserts:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="cf">assert</span> steps <span class="op">&lt;=</span> <span class="dv">2</span><span class="op">**</span><span class="dv">32</span> <span class="op">//</span> extension_factor</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="cf">assert</span> is_a_power_of_2(steps) <span class="kw">and</span> is_a_power_of_2(<span class="bu">len</span>(round_constants))</span>

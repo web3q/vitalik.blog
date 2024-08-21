@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
 
 <script type="text/x-mathjax-config">
@@ -50,6 +51,51 @@ MathJax = {
 
 <div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
 
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
 
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="[Mirror] Central Planning as Overfitting" />
@@ -101,7 +147,7 @@ MathJax = {
 <li>Low VC dimension leads to resistance to corruption, because if VC dimension is low, a corrupt or self-interested party in control of some knobs will not as easily be able to achieve some particular outcome that they desire. In particular, this agent will be "checked and balanced" by other parts of the system that redundantly achieve the originally desired ends.</li>
 <li>They can achieve legitimacy because people can randomly check a few parts and verify in detail that those parts work in ways that are reasonable, and assume that the rest of the system works in a similar way. An example of this was the ratification of the United States Constitution which, while quite elaborate, was primarily elaborate in the redundancy with which it applied the principle of checks and balances of power. Thus most citizens only read one or a few of <a href="https://en.wikipedia.org/wiki/The_Federalist_Papers">The Federalist Papers</a> that explained and defended the Constitution, and yet got a reasonable sense for what was going on.</li>
 </ul>
-<p>This is not as clean and convenient as a system with low Kolmogorov complexity, but still much better than a system with high complexity where the complexity is "optimizing" (for an example of this in the blockchain context, see <a href="https://vitalik.ca/general/2017/12/17/voting.html">Vitalik's opposition and alternative to on-chain governance</a>). The primary disadvantage we see in Kolmogorov complex but VC simple designs is for new social institutions, where it may be hard to persuade the public that these are VC simple. VC simplicity is usually easier as a basis for legitimacy when an institutions has clearly been built up without any clear design over a long period of time or by a large committee of people with conflicting interests (as with the United States Constitution). Thus when offering innovations we tend to focus more on Kolmogorov simplicity and hope many redundant each Kolmogorov-simple elements will add up to a VC-simple system. However, we may just not have the imagination to think of how VC simplicity might be effectively explained.</p>
+<p>This is not as clean and convenient as a system with low Kolmogorov complexity, but still much better than a system with high complexity where the complexity is "optimizing" (for an example of this in the blockchain context, see <a href="../../../2017/12/17/voting.html">Vitalik's opposition and alternative to on-chain governance</a>). The primary disadvantage we see in Kolmogorov complex but VC simple designs is for new social institutions, where it may be hard to persuade the public that these are VC simple. VC simplicity is usually easier as a basis for legitimacy when an institutions has clearly been built up without any clear design over a long period of time or by a large committee of people with conflicting interests (as with the United States Constitution). Thus when offering innovations we tend to focus more on Kolmogorov simplicity and hope many redundant each Kolmogorov-simple elements will add up to a VC-simple system. However, we may just not have the imagination to think of how VC simplicity might be effectively explained.</p>
 <p>There are forms of the "avoid central planning" intuition that are misunderstandings and ultimately counterproductive. For example, try to automatically seize upon designs that seem at first glance to "look like a market", because not all markets are created equal. For example, one of us has argued for using <a href="https://ethresear.ch/t/first-and-second-price-auctions-and-improved-transaction-fee-markets/2410">fixed prices in certain settings to reduce uncertainty</a>, and the other has (for similar information sharing reasons) argued for auctions that are a synthesis of standard descending price Dutch and ascending price English auctions (Channel auctions). That said, it is also equally a large error to throw the intuition away entirely. Rather, it is a valuable and important insight that can easily is central to the methodology we have been recently trying to develop. Simplicity to Whom? Or Why Humanities Matter</p>
 <p>However, the academic critics of this type of work are not simply confused. There is a reasonable basis for unease with discussions of "simplicity" because they inevitably contain a degree of subjectivity. What is "simple" to describe or appears to have few knobs in one language for describing it is devilishly complex in another, and vice versa. A few examples should help illuminate the point:</p>
 <ul>
@@ -116,5 +162,5 @@ MathJax = {
 <p>There are three flaws in that logic, it seems to us. First, to the extent it is applied, it should be applied uniformly to all innovation, not merely to new social institutions. Technologies like the internet have contributed greatly to human progress, but have also led to significant social upheavals; this is not a reason to stop trying to advance our technologies and systems for communication, and it is not a reason to stop trying to advance our social technologies for allocating scarce resources.</p>
 <p>Second, the benefits of innovation are real, and social institutions stand to benefit from growing human intellectual progress as much as everything else. The theoretical case for Harberger taxes providing efficiency benefits is strong, and there is great social value in doing small and medium-scale experiments to try ideas like them out. Investing in experiments today increases what we know, and so increases the scope of what can be done "conservatively" tomorrow.</p>
 <p>Third, and most importantly, the cultural context in which you as a decision maker have grown up today is far from the only culture that has existed on earth. Even at present, Singapore, China, Taiwan and Scandinavia have had significant success with quite different property regimes than the United States. Video game developers and internet protocol designers have had to solve incentive problems of a similar character to what we see today in the blockchain space and have come up with many kinds of solutions, and throughout history, we have seen a wide variety of social systems used for different purposes, with a wide range of resulting outcomes. By learning about the different ways in which societies have lived, understood what is natural and imagined their politics, we can gain the benefits of learning from historical experience and yet at the same time open ourselves to a much broader space of possible ideas to work with.</p>
-<p>This is why we believe that balance and collaboration between different modes of learning and understanding, both the mathematical one of economists and computer scientists, and the historical experiences studied by historians, anthropologists, political scientists, etc is critical to avoid the mix of and often veering between extreme conservatism and dangerous utopianism that has become characteristic of much intellectual discourse in e.g. the economics community, the "rationalist" community, and in <a href="http://www.truthcoin.info/blog/against-the-hard-fork/">many</a> <a href="https://vitalik.ca/general/2018/03/28/plutocracy.html">cases</a> blockchain protocol design.</p>
+<p>This is why we believe that balance and collaboration between different modes of learning and understanding, both the mathematical one of economists and computer scientists, and the historical experiences studied by historians, anthropologists, political scientists, etc is critical to avoid the mix of and often veering between extreme conservatism and dangerous utopianism that has become characteristic of much intellectual discourse in e.g. the economics community, the "rationalist" community, and in <a href="http://www.truthcoin.info/blog/against-the-hard-fork/">many</a> <a href="../../../2018/03/28/plutocracy.html">cases</a> blockchain protocol design.</p>
  </div> 

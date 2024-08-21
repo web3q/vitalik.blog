@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
 
 <script type="text/x-mathjax-config">
@@ -50,6 +51,51 @@ MathJax = {
 
 <div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
 
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
 
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Zmowa" />
@@ -64,7 +110,7 @@ MathJax = {
 <title> Zmowa </title>
 
 <p><em>Specjalne podziękowania dla Glena Weyla, Phila Daiana i Jinglana Wanga za recenzję, i dla Dawida Kurdziela i bichvan2408 za tłumaczenie</em></p>
-<p>W ciągu ostatnich kilku lat wzrosło zainteresowanie wykorzystaniem rozmyślnie skonstruowanych bodźców ekonomicznych i mechanizmów zaprojektowanych w celu dostosowania zachowania uczestników w różnych kontekstach. W przestrzeni blockchain konstrukcja mechanizmu przede wszystkim zapewnia bezpieczeństwo samego łańcucha bloków, zachęcając górników lub walidatorów proof of stake do uczciwego udziału, ale ostatnio jest on stosowany w <a href="https://www.augur.net/">rynkach prognoz</a>, „<a href="https://medium.com/@tokencuratedregistry/a-simple-overview-of-token-curated-registries-84e2b7b19a06">tokenowo nadzorowanych rejestrach</a>" i wielu innych kontekstach. Powstający <a href="https://radicalxchange.org/">ruch RadicalXChange</a> zainicjował w międzyczasie eksperymenty z <a href="https://medium.com/@simondlr/this-artwork-is-always-on-sale-92a7d0c67f43">podatkami Harbergera</a>, głosowaniem kwadratowym, <a href="https://medium.com/gitcoin/gitcoin-grants-50k-open-source-fund-e20e09dc2110">finansowaniem kwadratowym</a> i in. W ostatnim czasie wzrosło również zainteresowanie wykorzystaniem bodźców opartych na tokenach w celu promowania wysokiej jakości postów w mediach społecznościowych. Jednakże w miarę jak rozwój tych systemów przechodzi z teorii do praktyki, pojawia się szereg wyzwań, którym należy stawić czoła, a których, jak sądzę, jeszcze wystarczająco nie rozpoznano. Świeżym przykładem tego przejścia od teorii do wdrożenia jest Bihu, chińska platforma, która niedawno wypuściła oparty na monetach mechanizm zachęcania ludzi do pisania postów. Podstawowym mechanizmem (patrz white paper w języku chińskim <a href="https://www.chainwhy.com/whitepaper/keywhitepaper.html">tutaj</a>) jest to, że jeśli użytkownik platformy posiada żetony KEY, ma możliwość postawienia tych żetonów na artykuły; każdy użytkownik może oddać <code>k</code> „głosów poparcia" dziennie, a „waga" każdego głosu poparcia jest proporcjonalna do stawki użytkownika, który oddał głos. Artykuły z większą ilością udziałów w głosach poparcia są bardziej widoczne, a autor artykułu otrzymuje nagrodę w postaci tokenów KEY mniej więcej proporcjonalną do ilości głosów KEY popierających ten artykuł. Jest to wielkie uproszczenie, a rzeczywisty mechanizm ma w sobie pewne nieliniowości, ale nie są one niezbędne dla podstawowego funkcjonowania mechanizmu. KEY ma wartość, ponieważ może być używany na różne sposoby wewnątrz platformy, ale przede wszystkim procent wszystkich przychodów z reklam wykorzystywany jest do zakupu i spalania KEY (hura, wielkie brawa dla nich za to, a nie robienie jeszcze jednego <a href="https://vitalik.ca/general/2017/10/17/moe.html">medium do wymiany tokenów</a>!). Ten rodzaj konstrukcji jest daleki od unikalności; zachęcanie do tworzenia treści online jest czymś, na czym bardzo wielu ludziom zależy i było wiele projektów o podobnym charakterze, jak również kilka dość odmiennych. I w tym przypadku ta konkretna platforma jest już w znacznym stopniu wykorzystywana:</p>
+<p>W ciągu ostatnich kilku lat wzrosło zainteresowanie wykorzystaniem rozmyślnie skonstruowanych bodźców ekonomicznych i mechanizmów zaprojektowanych w celu dostosowania zachowania uczestników w różnych kontekstach. W przestrzeni blockchain konstrukcja mechanizmu przede wszystkim zapewnia bezpieczeństwo samego łańcucha bloków, zachęcając górników lub walidatorów proof of stake do uczciwego udziału, ale ostatnio jest on stosowany w <a href="https://www.augur.net/">rynkach prognoz</a>, „<a href="https://medium.com/@tokencuratedregistry/a-simple-overview-of-token-curated-registries-84e2b7b19a06">tokenowo nadzorowanych rejestrach</a>" i wielu innych kontekstach. Powstający <a href="https://radicalxchange.org/">ruch RadicalXChange</a> zainicjował w międzyczasie eksperymenty z <a href="https://medium.com/@simondlr/this-artwork-is-always-on-sale-92a7d0c67f43">podatkami Harbergera</a>, głosowaniem kwadratowym, <a href="https://medium.com/gitcoin/gitcoin-grants-50k-open-source-fund-e20e09dc2110">finansowaniem kwadratowym</a> i in. W ostatnim czasie wzrosło również zainteresowanie wykorzystaniem bodźców opartych na tokenach w celu promowania wysokiej jakości postów w mediach społecznościowych. Jednakże w miarę jak rozwój tych systemów przechodzi z teorii do praktyki, pojawia się szereg wyzwań, którym należy stawić czoła, a których, jak sądzę, jeszcze wystarczająco nie rozpoznano. Świeżym przykładem tego przejścia od teorii do wdrożenia jest Bihu, chińska platforma, która niedawno wypuściła oparty na monetach mechanizm zachęcania ludzi do pisania postów. Podstawowym mechanizmem (patrz white paper w języku chińskim <a href="https://www.chainwhy.com/whitepaper/keywhitepaper.html">tutaj</a>) jest to, że jeśli użytkownik platformy posiada żetony KEY, ma możliwość postawienia tych żetonów na artykuły; każdy użytkownik może oddać <code>k</code> „głosów poparcia" dziennie, a „waga" każdego głosu poparcia jest proporcjonalna do stawki użytkownika, który oddał głos. Artykuły z większą ilością udziałów w głosach poparcia są bardziej widoczne, a autor artykułu otrzymuje nagrodę w postaci tokenów KEY mniej więcej proporcjonalną do ilości głosów KEY popierających ten artykuł. Jest to wielkie uproszczenie, a rzeczywisty mechanizm ma w sobie pewne nieliniowości, ale nie są one niezbędne dla podstawowego funkcjonowania mechanizmu. KEY ma wartość, ponieważ może być używany na różne sposoby wewnątrz platformy, ale przede wszystkim procent wszystkich przychodów z reklam wykorzystywany jest do zakupu i spalania KEY (hura, wielkie brawa dla nich za to, a nie robienie jeszcze jednego <a href="../../../2017/10/17/moe.html">medium do wymiany tokenów</a>!). Ten rodzaj konstrukcji jest daleki od unikalności; zachęcanie do tworzenia treści online jest czymś, na czym bardzo wielu ludziom zależy i było wiele projektów o podobnym charakterze, jak również kilka dość odmiennych. I w tym przypadku ta konkretna platforma jest już w znacznym stopniu wykorzystywana:</p>
 <p><img src="../../../../images/collusion-files/screenie.png" /></p>
 <p>Kilka miesięcy temu, handlujący Ethereum subreddit <a href="http://reddit.com/r/ethtrader">/r/ethtrader</a> wprowadził nieco podobną eksperymentalną funkcję, dzięki której token o nazwie „pączek" jest wydawany użytkownikom wyrażającym komentarze otrzymujące głosy poparcia, z ustaloną ilością pączków wydawanych tygodniowo użytkownikom proporcjonalnie do tego, ile głosów poparcia otrzymał ich komentarz. Pączki mogą być wykorzystane do zakupu prawa do umieszczenia treści bannera na górze subredditu, a także do głosowania w sondażach społecznościowych. Jednakże, w przeciwieństwie do tego, co dzieje się w systemie KEY, tutaj nagroda, którą otrzymuje B, gdy A zagłosuje na B, nie jest proporcjonalna do istniejącej liczby monet należących do A; zamiast tego, każde konto Reddit ma równą możliwość wpłaty na inne konta Reddit.</p>
 <p><img src="../../../../images/collusion-files/donuts.png" /></p>
@@ -73,7 +119,7 @@ MathJax = {
 <li><strong>Subsydiują plutokrację</strong>, ponieważ bardzo zamożne osoby i kartele nadal mogą uzyskać wystarczająco dużo środków, aby samodzielnie głosować.</li>
 <li>Mogą one zostać ominięte przez użytkowników *** przekupujących*** innych użytkowników, aby głosować na nich masowo.</li>
 </ul>
-<p>Ataki łapówkarskie mogą brzmieć zbyt przesadnie (kto tu kiedykolwiek w życiu przyjął łapówkę?), ale w dojrzałym ekosystemie są o wiele bardziej realistyczne, niż się wydaje. W większości <a href="https://vitalik.ca/general/2017/12/17/voting.html">kontekstów, w których łapówki miały miejsce</a> w przestrzeni blockchain, operatorzy używają eufemistycznej nowej nazwy, aby nadać koncepcji przyjazną twarz: to nie jest łapówka, to „staking pool", która „rozdziela dywidendę". Łapówki można nawet zatuszować: wyobraź sobie kantor wymiany kryptowalut, który oferuje zerowe opłaty i wydaje pieniądze na niezwykle dobry interfejs użytkownika i nawet nie próbuje zebrać zysku. Zamiast tego używa monet, które użytkownicy wpłacają, aby uczestniczyć w różnych systemach głosowania za pomocą monet. Nieuchronnie pojawią się również ludzie, którzy będą postrzegać zmowę w grupie jako zwykłą, normalną rzecz. Przykładem może być niedawny <a href="https://twitter.com/MapleLeafCap/status/1044958643731533825">skandal z udziałem EOS DPOS</a>:</p>
+<p>Ataki łapówkarskie mogą brzmieć zbyt przesadnie (kto tu kiedykolwiek w życiu przyjął łapówkę?), ale w dojrzałym ekosystemie są o wiele bardziej realistyczne, niż się wydaje. W większości <a href="../../../2017/12/17/voting.html">kontekstów, w których łapówki miały miejsce</a> w przestrzeni blockchain, operatorzy używają eufemistycznej nowej nazwy, aby nadać koncepcji przyjazną twarz: to nie jest łapówka, to „staking pool", która „rozdziela dywidendę". Łapówki można nawet zatuszować: wyobraź sobie kantor wymiany kryptowalut, który oferuje zerowe opłaty i wydaje pieniądze na niezwykle dobry interfejs użytkownika i nawet nie próbuje zebrać zysku. Zamiast tego używa monet, które użytkownicy wpłacają, aby uczestniczyć w różnych systemach głosowania za pomocą monet. Nieuchronnie pojawią się również ludzie, którzy będą postrzegać zmowę w grupie jako zwykłą, normalną rzecz. Przykładem może być niedawny <a href="https://twitter.com/MapleLeafCap/status/1044958643731533825">skandal z udziałem EOS DPOS</a>:</p>
 <p><img src="../../../../images/collusion-files/mapleleaf1.png" /></p>
 <p><img src="../../../../images/collusion-files/mapleleaf2.png" /></p>
 <p>W końcu istnieje możliwość „negatywnej łapówki", tzn. szantażu lub przymusu, grożąc uczestnikom krzywdą, chyba że zadziałają oni w określony sposób wewnątrz mechanizmu. W eksperymencie /r/ethtrader strach przed ludźmi przychodzącymi i <em>kupującymi</em> pączki w celu zmiany sondaży zarządzających doprowadził do tego, że społeczność zdecydowała się na stworzenie tylko zablokowanych (tj. niepodlegających wymianie handlowej) pączków uprawnionych do wykorzystania w głosowaniu. Ale jest jeszcze tańszy atak niż kupowanie pączków (atak, który można uznać za rodzaj zamaskowanej łapówki): <em>wynajmowanie</em> ich. Jeśli napastnik posiada już ETH, może użyć go jako zabezpieczenia na platformie takiej jak <a href="https://compound.finance/">Compound</a>, aby pożyczyć jakiś token, dając Ci pełne prawo do użycia tego tokena w dowolnym celu, włączając w to udział w głosowaniu. Kiedy to zrobi, po prostu odsyła tokeny z powrotem do kontraktu pożyczki, aby odzyskać swoje zabezpieczenie - wszystko to bez konieczności znoszenia nawet jednej sekundy ekspozycji cenowej na token, którego użył do oddania głosu monetą, nawet jeśli mechanizm głosowania monetą zawiera blokadę czasową (jak np. Bihu). W każdym przypadku problemy związane z łapówkarstwem i przypadkowe nadmierne wzmocnienie dobrze powiązanych i zamożnych uczestników okazują się zaskakująco trudne do uniknięcia. <strong>Tożsamość</strong> Niektóre systemy próbują złagodzić plutokratyczne aspekty głosowania monetami poprzez wykorzystanie systemu tożsamości. W przypadku systemu pączków /r/ethtrader, na przykład, <em>sondaże zarządzające</em> są wprawdzie przeprowadzane za pomocą głosowania monetami, jednak mechanizm, który decyduje o tym, <em>jak dużo pączków (tj. monet) otrzymujesz w pierwszej kolejności</em> oparty jest na kontach Reddit: 1 głos poparcia z 1 konta Reddit = N zarobionych pączków. Idealnym celem systemu tożsamości jest sprawienie, by uzyskanie przez jednostkę jednej tożsamości było stosunkowo łatwe, natomiast uzyskanie wielu tożsamości - stosunkowo trudne. W systemie pączków /r/ethtrader są to konta Reddit, a w gadżecie dopasowującym Gitcoin CLR używane są konta Githuba. Ale tożsamość, przynajmniej dotychczas implementowana, jest delikatną rzeczą...</p>

@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
 
 <script type="text/x-mathjax-config">
@@ -50,6 +51,51 @@ MathJax = {
 
 <div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
 
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
 
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Review of Optimism retro funding round 1" />
@@ -69,7 +115,7 @@ MathJax = {
 <ul>
 <li>The rules that the badge holders were supposed to follow were enshrined in <a href="https://www.notion.so/optimismpbc/Public-Badge-Holder-Manual-d05c3695ef684d1fb62ef38690fb3ff7">the badge holder instructions</a></li>
 <li>You can see the projects that were nominated <a href="https://docs.google.com/spreadsheets/d/1rphUkII5-49VmRVKaQBxsOYRNsO56ifGSSLctQyduWg">in this spreadsheet</a></li>
-<li>All discussion between the badge holders happened in publicly viewable forums. In addition to Twitter conversation (eg. <a href="https://twitter.com/technocrypto/status/1454191422601678854?t=qYCreicPHwjsbpkZgBo69w&amp;s=19">Jeff Coleman's thread</a> and also <a href="https://twitter.com/austingriffith/status/1446221993678815237?s=20">others</a>), all of the explicit structured discussion channels were publicly viewable: the <span style="color:#880044">#retroactive-public-goods</span> channel on the <a href="https://discord.com/invite/jrnFEvq">Optimism discord</a>, and a <a href="https://vitalik.ca/files/misc_files/retro_recording.mp4">published Zoom call</a></li>
+<li>All discussion between the badge holders happened in publicly viewable forums. In addition to Twitter conversation (eg. <a href="https://twitter.com/technocrypto/status/1454191422601678854?t=qYCreicPHwjsbpkZgBo69w&amp;s=19">Jeff Coleman's thread</a> and also <a href="https://twitter.com/austingriffith/status/1446221993678815237?s=20">others</a>), all of the explicit structured discussion channels were publicly viewable: the <span style="color:#880044">#retroactive-public-goods</span> channel on the <a href="discord.optimism.io">Optimism discord</a>, and a <a href="https://vitalik.ca/files/misc_files/retro_recording.mp4">published Zoom call</a></li>
 <li>The full results, and the individual badge holder votes that went into the results, can be viewed <a href="https://docs.google.com/spreadsheets/d/1g4ilAByMNQsmlBC8cskQip7Ojd_qK6IhozJCyoVfU9k">in this spreadsheet</a></li>
 </ul>
 <p>And finally, here are the results in an easy-to-read chart form:</p>
@@ -78,12 +124,12 @@ MathJax = {
 <p><img src="../../../../images/retro1/resultschart.png" /></p>
 </center>
 <p><br></p>
-<p>Much like the <a href="https://vitalik.ca/general/2021/04/02/round9.html">Gitcoin quadratic funding</a> rounds and the <a href="https://www.molochdao.com/">MolochDAO</a> grants, this is yet another instance of the Ethereum ecosystem establishing itself as a key player in the innovative public goods funding mechanism design space. But what can we learn from this experiment?</p>
+<p>Much like the <a href="../../../2021/04/02/round9.html">Gitcoin quadratic funding</a> rounds and the <a href="https://www.molochdao.com/">MolochDAO</a> grants, this is yet another instance of the Ethereum ecosystem establishing itself as a key player in the innovative public goods funding mechanism design space. But what can we learn from this experiment?</p>
 <h2 id="analyzing-the-results">Analyzing the results</h2>
 <p>First, let us see if there are any interesting takeaways that can be seen by looking at the results. But what do we compare the results to? The most natural point of comparison is the other major public goods funding experiment that we've had so far: the Gitcoin quadratic funding rounds (in this case, round 11).</p>
 <center>
 <br>
-<table>
+<table class="transparent centered">
 <tr>
 <td>
 <h3>
@@ -199,7 +245,7 @@ Optimism retro round 1
 <p>Some kind of multi-level structure for nominations seems inevitable. There's probably no need to enshrine it directly into the voting rules. Instead, we can look at this as one particular way of changing the structure of the discussion: nomination rules filter out the nominations that badge holders need to look at, and anything the badge holders do not look at will get zero votes by default (unless a badge holder <em>really</em> cares to bypass the rules because they have their own reasons to believe that some project is valuable).</p>
 <center>
 <p><br></p>
-<p><img src="../../../../images/retro1/nominations.png" /></p>
+<p><img src="../../../../images/retro1/nominations.png" class="padded" /></p>
 </center>
 <p>Some possible ideas:</p>
 <ul>
@@ -238,7 +284,7 @@ Optimism retro round 1
 <p>I personally would favor the second round of Optimism retro funding using completely secret votes (except perhaps open to a few researchers under conditions of non-disclosure) so we can tell what the material differences are in the outcome. Given the current small and tight-knit set of badge holders, dealing with rogue badge hodlers is likely not a primary concern, but in the future it will be; hence, coming up with a secret ballot design that allows counter-voting or some alternative strategy is an important research problem.</p>
 <h2 id="other-ideas-for-structuring-discussion">Other ideas for structuring discussion</h2>
 <p>The level of participation among badge holders was very uneven. Some (particularly Jeff Coleman and Matt Garnett) put a lot of effort into their participation, publicly expressing their detailed reasoning <a href="https://twitter.com/technocrypto/status/1454191422601678854">in Twitter threads</a> and helping to set up calls for more detailed discussion. Others participated in the discussion on Discord and still others just voted and did little else.</p>
-<p>There was a choice made (ok fine, I was the one who suggested it) that the <span style="color:#880044">#retroactive-public-goods</span> channel should be readable by all (it's in the <a href="https://discord.com/invite/jrnFEvq">Optimism discord</a>), but to prevent spam only badge holders should be able to speak. This reduced many people's ability to participate, especially ironically enough my own (I am not a badge holder, and my self-imposed Twitter quarantine, which only allows me to tweet links to my own long-form content, prevented me from engaging on Twitter).</p>
+<p>There was a choice made (ok fine, I was the one who suggested it) that the <span style="color:#880044">#retroactive-public-goods</span> channel should be readable by all (it's in the <a href="discord.optimism.io">Optimism discord</a>), but to prevent spam only badge holders should be able to speak. This reduced many people's ability to participate, especially ironically enough my own (I am not a badge holder, and my self-imposed Twitter quarantine, which only allows me to tweet links to my own long-form content, prevented me from engaging on Twitter).</p>
 <p>These two factors together meant that there was not that much discussion taking place; certainly less than I had been hoping for. What are some ways to encourage more discussion?</p>
 <p>Some ideas:</p>
 <ul>

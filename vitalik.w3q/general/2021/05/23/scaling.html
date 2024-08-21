@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
 
 <script type="text/x-mathjax-config">
@@ -50,6 +51,51 @@ MathJax = {
 
 <div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
 
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
 
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="The Limits to Blockchain Scalability" />
@@ -81,13 +127,13 @@ MathJax = {
 </center>
 <p><br></p>
 <p>Can this happen on your blockchain? The elites of your blockchain community, including pools, block explorers and hosted nodes, are probably quite well-coordinated; quite likely they're all in the same telegram channels and wechat groups. If they really <em>want</em> to organize a sudden change to the protocol rules to further their own interests, then they probably can. The Ethereum blockchain has fully resolved <a href="https://blog.ethereum.org/2016/11/25/security-alert-11242016-consensus-bug-geth-v1-4-19-v1-5-2/">consensus failures</a> in ten hours; if your blockchain has only one client implementation, and you only need to deploy a code change to a few dozen nodes, coordinating a change to client code can be done much faster. The only reliable way to make this kind of coordinated social attack <em>not</em> effective is through passive defense from the one constituency that actually is decentralized: the <em>users</em>.</p>
-<p>Imagine how the story would have played out if the users were running nodes that verify the chain (whether directly or through <a href="https://vitalik.ca/general/2021/04/07/sharding.html#improving-sharding-with-better-security-models">more advanced indirect techniques</a>), and automatically reject blocks that break the protocol rules <em>even if</em> over 90% of the miners or stakers support those blocks. If <em>every</em> user ran a verifying node, then the attack would have quickly failed: a few mining pools and exchanges would have forked off and looked quite foolish in the process. But even if <em>some</em> users ran verifying nodes, the attack would not have led to a <em>clean victory</em> for the attacker; rather, it would have led to <em>chaos</em>, with different users seeing different views of the chain. At the very least, the ensuing market panic and likely persistent chain split would greatly reduce the attackers' profits. The thought of navigating such a protracted conflict would itself deter most attacks.</p>
+<p>Imagine how the story would have played out if the users were running nodes that verify the chain (whether directly or through <a href="../../../2021/04/07/sharding.html#improving-sharding-with-better-security-models">more advanced indirect techniques</a>), and automatically reject blocks that break the protocol rules <em>even if</em> over 90% of the miners or stakers support those blocks. If <em>every</em> user ran a verifying node, then the attack would have quickly failed: a few mining pools and exchanges would have forked off and looked quite foolish in the process. But even if <em>some</em> users ran verifying nodes, the attack would not have led to a <em>clean victory</em> for the attacker; rather, it would have led to <em>chaos</em>, with different users seeing different views of the chain. At the very least, the ensuing market panic and likely persistent chain split would greatly reduce the attackers' profits. The thought of navigating such a protracted conflict would itself deter most attacks.</p>
 <br>
 <center>
 <a href="https://twitter.com/hasufl/status/1376998067040366593"><img src="../../../../images/scaling-files/hasutweet.png" /></a><br><br> <small><i>Listen to Hasu on this one.</i></small>
 </center>
 <p><br></p>
-<p>If you have a community of 37 node runners and 80000 passive listeners that check signatures and block headers, the attacker wins. If you have a community where everyone runs a node, the attacker loses. We don't know what the exact threshold is at which <a href="https://vitalik.ca/general/2020/08/17/philosophy.html">herd immunity</a> against coordinated attacks kicks in, but there is one thing that's absolutely clear: more nodes good, fewer nodes bad, and we definitely need more than a few dozen or few hundred.</p>
+<p>If you have a community of 37 node runners and 80000 passive listeners that check signatures and block headers, the attacker wins. If you have a community where everyone runs a node, the attacker loses. We don't know what the exact threshold is at which <a href="../../../2020/08/17/philosophy.html">herd immunity</a> against coordinated attacks kicks in, but there is one thing that's absolutely clear: more nodes good, fewer nodes bad, and we definitely need more than a few dozen or few hundred.</p>
 <h2 id="so-what-are-the-limits-to-how-much-work-we-can-require-full-nodes-to-do">So, what are the limits to how much work we can require full nodes to do?</h2>
 <p>To maximize the number of users who can run a node, we'll focus on regular consumer hardware. There are some increases to capacity that can be achieved by demanding some specialized hardware purchases that are easy to obtain (eg. from Amazon), but they actually don't increase scalability by that much.</p>
 <p>There are three key limitations to a full node's ability to process a large number of transactions:</p>
@@ -140,20 +186,20 @@ MathJax = {
 <p>Additionally, there are interaction effects between these three types of costs. Because databases use tree structures internally to store and retrieve data, the cost of fetching data from a database increases with the logarithm of the size of the database. In fact, because the top level (or top few levels) can be cached in RAM, the disk access cost is proportional to the <em>size of the database as a multiple of the size of the data cached in RAM</em>.</p>
 <br>
 <center>
-<img src="../../../../images/scaling-files/tree.png" /><br><br> <small><i>Don't take this diagram too literally; different databases work in different ways, and often the part in memory is just a single (but big) layer (see <a href="http://paperhub.s3.amazonaws.com/18e91eb4db2114a06ea614f0384f2784.pdf">LSM trees</a> as used in leveldb). But the basic principles are the same.</i></small>
+<img src="../../../../images/scaling-files/tree.png" class="padded" /><br><br> <small><i>Don't take this diagram too literally; different databases work in different ways, and often the part in memory is just a single (but big) layer (see <a href="http://paperhub.s3.amazonaws.com/18e91eb4db2114a06ea614f0384f2784.pdf">LSM trees</a> as used in leveldb). But the basic principles are the same.</i></small>
 </center>
 <p><br></p>
 <p>For example, if the cache is 4 GB, and we assume that each layer of the database is 4x bigger than the previous, then Ethereum's current ~64 GB state would require ~2 accesses. But if the state size increases by 4x to ~256 GB, then this would increase to ~3 accesses (so 1.5x more accesses per read). Hence, a 4x increase in the gas limit, which would increase both the state size and the number of reads, could actually translate into a ~6x increase in block verification time. The effect may be even stronger: hard disks often take longer to read and write when they are full than when they are near-empty.</p>
 <h3 id="so-what-does-this-mean-for-ethereum">So what does this mean for Ethereum?</h3>
-<p>Today in the Ethereum blockchain, running a node already is challenging for many users, though it is still at least <em>possible</em> on regular hardware (I just synced a node on my laptop while writing this post!). Hence, we are close to hitting bottlenecks. <strong>The issue that core developers are most concerned with is storage size.</strong> Thus, at present, valiant efforts at solving bottlenecks in computation and data, and even changes to the consensus algorithm, are unlikely to lead to large gas limit increases being accepted. Even <a href="https://blog.ethereum.org/2021/05/18/eth_state_problems/">solving Ethereum's largest outstanding DoS vulnerability</a> only led to a gas limit increase of 20%.</p>
+<p>Today in the Ethereum blockchain, running a node already is challenging for many users, though it is still at least <em>possible</em> on regular hardware (I just synced a node on my laptop while writing this post!). Hence, we are close to hitting bottlenecks. <strong>The issue that core developers are most concerned with is storage size.</strong> Thus, at present, valiant efforts at solving bottlenecks in computation and data, and even changes to the consensus algorithm, are unlikely to lead to large gas limit increases being accepted. Even <a href="https://blog.ethereum.org/2021/05/18/eth-state-problems/">solving Ethereum's largest outstanding DoS vulnerability</a> only led to a gas limit increase of 20%.</p>
 <p>The only solution to storage size problems is <a href="https://hackmd.io/@vbuterin/state_expiry_paths">statelessness and state expiry</a>. <strong>Statelessness</strong> allows for a class of nodes that verify the chain <em>without</em> maintaining permanent storage. <strong>State expiry</strong> pushes out state that has not been recently accessed, forcing users to manually provide proofs to renew it. Both of these paths have been worked at for a long time, and proof-of-concept implementation on statelessness has already started. These two improvements combined can greatly alleviate these concerns and open up room for a significant gas limit increase. <strong>But even after statelessness and state expiry are implemented, gas limits may only increase safely by perhaps ~3x until the other limitations start to dominate.</strong></p>
-<p>Another possible medium-term solution is using ZK-SNARKs to verify transactions. ZK-SNARKs would ensure that regular users do not have to personally store the state <em>or</em> verify blocks, though they still would need to download all the data in blocks to protect against <a href="https://github.com/ethereum/research/wiki/A-note-on-data-availability-and-erasure-coding">data unavailability attacks</a>. Additionally, even if attackers cannot force <em>invalid</em> blocks through, if capacity is increased to the point where running a consensus node is <em>too</em> difficult, there is still the risk of coordinated censorship attacks. Hence, ZK-SNARKs cannot increase capacity infinitely, but they still can increase capacity by a significant margin (perhaps 1-2 orders of magnitude). Some chains are exploring this approach at layer 1; Ethereum is getting the benefits of this approach through layer-2 protocols (called <a href="https://vitalik.ca/general/2021/01/05/rollup.html">ZK rollups</a>) such as <a href="https://zksync.io/">zksync</a>, <a href="https://loopring.org/">Loopring</a> and <a href="https://medium.com/starkware/on-the-road-to-starknet-a-permissionless-stark-powered-l2-zk-rollup-83be53640880">Starknet</a>.</p>
+<p>Another possible medium-term solution is using ZK-SNARKs to verify transactions. ZK-SNARKs would ensure that regular users do not have to personally store the state <em>or</em> verify blocks, though they still would need to download all the data in blocks to protect against <a href="https://github.com/ethereum/research/wiki/A-note-on-data-availability-and-erasure-coding">data unavailability attacks</a>. Additionally, even if attackers cannot force <em>invalid</em> blocks through, if capacity is increased to the point where running a consensus node is <em>too</em> difficult, there is still the risk of coordinated censorship attacks. Hence, ZK-SNARKs cannot increase capacity infinitely, but they still can increase capacity by a significant margin (perhaps 1-2 orders of magnitude). Some chains are exploring this approach at layer 1; Ethereum is getting the benefits of this approach through layer-2 protocols (called <a href="../../../2021/01/05/rollup.html">ZK rollups</a>) such as <a href="https://zksync.io/">zksync</a>, <a href="https://loopring.org/">Loopring</a> and <a href="https://medium.com/starkware/on-the-road-to-starknet-a-permissionless-stark-powered-l2-zk-rollup-83be53640880">Starknet</a>.</p>
 <h2 id="what-happens-after-sharding">What happens after sharding?</h2>
-<p><strong>Sharding fundamentally gets around the above limitations, because it decouples the data contained on a blockchain from the data that a single node needs to process and store.</strong> Instead of nodes verifying blocks by personally downloading and executing them, they use <a href="https://vitalik.ca/general/2021/04/07/sharding.html">advanced mathematical and cryptographic techniques</a> to verify blocks indirectly.</p>
-<p>As a result, sharded blockchains can safely have very high levels of transaction throughput that non-sharded blockchains cannot. This does require a lot of cryptographic cleverness in creating efficient substitutes for naive full validation that successfully reject invalid blocks, but it can be done: the <a href="https://hackmd.io/@vbuterin/das">theory</a> is <a href="https://vitalik.ca/general/2021/01/26/snarks.html">well-established</a> and proof-of-concepts based on <a href="https://github.com/ethereum/eth2.0-specs/blob/dev/specs/sharding/beacon-chain.md">draft specifications</a> are already <a href="https://github.com/protolambda/eth2-das">being worked on</a>.</p>
+<p><strong>Sharding fundamentally gets around the above limitations, because it decouples the data contained on a blockchain from the data that a single node needs to process and store.</strong> Instead of nodes verifying blocks by personally downloading and executing them, they use <a href="../../../2021/04/07/sharding.html">advanced mathematical and cryptographic techniques</a> to verify blocks indirectly.</p>
+<p>As a result, sharded blockchains can safely have very high levels of transaction throughput that non-sharded blockchains cannot. This does require a lot of cryptographic cleverness in creating efficient substitutes for naive full validation that successfully reject invalid blocks, but it can be done: the <a href="https://hackmd.io/@vbuterin/das">theory</a> is <a href="../../../2021/01/26/snarks.html">well-established</a> and proof-of-concepts based on <a href="https://github.com/ethereum/eth2.0-specs/blob/dev/specs/sharding/beacon-chain.md">draft specifications</a> are already <a href="https://github.com/protolambda/eth2-das">being worked on</a>.</p>
 <br>
 <center>
-<img src="https://vitalik.ca../../../../images/sharding-files/beacon_chain.jpg" /><br>
+<img src="../../../../images/sharding-files/beacon_chain.jpg" class="padded" /><br>
 </center>
 <p><br></p>
 <p>Ethereum is planning to use <strong>quadratic sharding</strong>, where total scalability is limited by the fact that a node has to be able to process both a single shard and the beacon chain which has to perform some fixed amount of management work for each shard. If shards are too big, nodes can no longer process individual shards, and if there are too many shards, nodes can no longer process the beacon chain. The product of these two constraints forms the upper bound.</p>

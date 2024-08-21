@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
 
 <script type="text/x-mathjax-config">
@@ -50,6 +51,51 @@ MathJax = {
 
 <div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
 
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
 
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Na colusão" />
@@ -64,7 +110,7 @@ MathJax = {
 <title> Na colusão </title>
 
 <p><em>Agradecimentos especiais a Glen Weyl, Phil Daian e Jinglan Wang para revisão, e Jeff Prestes para tradução</em></p>
-<p>Nos últimos anos, tem havido um interesse crescente em usar incentivos econômicos e design de mecanismos para alinhar o comportamento dos participantes em vários contextos. No mundo blockchain, o design dos mecanismos fornece, acima de tudo, a segurança para o próprio blockchain incentivando mineradores ou validadores de provas de depósitos com desafios de modo a que eles participem honestamente, mas, mais recentemente, está sendo também aplicado em <a href="https://www.augur.net/">mercados de predição</a>, "<a href="https://medium.com/@tokencuratedregistry/a-simple-overview-of-token-curated-registries-84e2b7b19a06">token com curadoria</a>" e outros contextos. O nascente <a href="https://radicalxchange.org/">movimento RadicalXChange</a> entretanto fez surgir experimentações com <a href="https://medium.com/@simondlr/this-artwork-is-always-on-sale-92a7d0c67f43">Harberger taxes</a>, voto quadrático, <a href="https://medium.com/gitcoin/gitcoin-grants-50k-open-source-fund-e20e09dc2110">Financiamento quadrático</a> e muito mais. Mais recentemente, tem havido também um interesse crescente em utilizar incentivos baseados em tokens para tentar encorajar textos de qualidade nos meios de comunicação social. No entanto, à medida que o desenvolvimento destes sistemas se aproxima da teoria à prática há uma série de desafios que têm de ser enfrentados, desafios que, a meu ver, ainda não foram adequadamente enfrentados. Como um exemplo recente deste movimento da teoria para a implantação, surgiu a Bihu, uma plataforma chinesa que libertou recentemente um mecanismo baseado em moedas para incentivar as pessoas a escrever postagens. O mecanismo básico (veja o whitepaper em chinês <a href="https://www.chainwhy.com/whitepaper/keywhitepaper.html">aqui</a>) é que se um usuário da plataforma possui tokens KEY, ele têm a capacidade de colocar esses tokens KEY nos artigos; todos os usuários podem fazer <code>k</code> "votos favoritos" por dia, e o "peso" de cada voto positivo é proporcional à participação do usuário fazendo o voto favorável. Artigos com uma maior quantidade de participações votando-os são exibids de maneira mais proeminente, e o autor do artigo recebe uma recompensa de KEY tokens aproximadamente proporcional à quantidade de votos positivos do KEY. Trata-se de uma simplificação excessiva e o próprio mecanismo tem nele algumas não-linearidades em si mas não são essenciais para o funcionamento básico do mecanismo. KEY tem valor porque pode ser usado de várias formas dentro da plataforma, mas especialmente uma porcentagem de todas as receitas de anúncios é usada para comprar e queimar KEY (ótimo!, grande ponto positivo a eles por fazer isto e não fazer outro <a href="https://vitalik.ca/general/2017/10/17/moe.html">token de meio de troca</a>!). Este tipo de design está longe de ser único. Incentivar a criação de conteúdo online é algo com que muitas pessoas se preocupam e houve muitas tentativas de natureza semelhante, bem como alguns com desenhos bastante diferentes. E, neste caso, esta plataforma específica já está sendo utilizada de forma significativa:</p>
+<p>Nos últimos anos, tem havido um interesse crescente em usar incentivos econômicos e design de mecanismos para alinhar o comportamento dos participantes em vários contextos. No mundo blockchain, o design dos mecanismos fornece, acima de tudo, a segurança para o próprio blockchain incentivando mineradores ou validadores de provas de depósitos com desafios de modo a que eles participem honestamente, mas, mais recentemente, está sendo também aplicado em <a href="https://www.augur.net/">mercados de predição</a>, "<a href="https://medium.com/@tokencuratedregistry/a-simple-overview-of-token-curated-registries-84e2b7b19a06">token com curadoria</a>" e outros contextos. O nascente <a href="https://radicalxchange.org/">movimento RadicalXChange</a> entretanto fez surgir experimentações com <a href="https://medium.com/@simondlr/this-artwork-is-always-on-sale-92a7d0c67f43">Harberger taxes</a>, voto quadrático, <a href="https://medium.com/gitcoin/gitcoin-grants-50k-open-source-fund-e20e09dc2110">Financiamento quadrático</a> e muito mais. Mais recentemente, tem havido também um interesse crescente em utilizar incentivos baseados em tokens para tentar encorajar textos de qualidade nos meios de comunicação social. No entanto, à medida que o desenvolvimento destes sistemas se aproxima da teoria à prática há uma série de desafios que têm de ser enfrentados, desafios que, a meu ver, ainda não foram adequadamente enfrentados. Como um exemplo recente deste movimento da teoria para a implantação, surgiu a Bihu, uma plataforma chinesa que libertou recentemente um mecanismo baseado em moedas para incentivar as pessoas a escrever postagens. O mecanismo básico (veja o whitepaper em chinês <a href="https://www.chainwhy.com/whitepaper/keywhitepaper.html">aqui</a>) é que se um usuário da plataforma possui tokens KEY, ele têm a capacidade de colocar esses tokens KEY nos artigos; todos os usuários podem fazer <code>k</code> "votos favoritos" por dia, e o "peso" de cada voto positivo é proporcional à participação do usuário fazendo o voto favorável. Artigos com uma maior quantidade de participações votando-os são exibids de maneira mais proeminente, e o autor do artigo recebe uma recompensa de KEY tokens aproximadamente proporcional à quantidade de votos positivos do KEY. Trata-se de uma simplificação excessiva e o próprio mecanismo tem nele algumas não-linearidades em si mas não são essenciais para o funcionamento básico do mecanismo. KEY tem valor porque pode ser usado de várias formas dentro da plataforma, mas especialmente uma porcentagem de todas as receitas de anúncios é usada para comprar e queimar KEY (ótimo!, grande ponto positivo a eles por fazer isto e não fazer outro <a href="../../../2017/10/17/moe.html">token de meio de troca</a>!). Este tipo de design está longe de ser único. Incentivar a criação de conteúdo online é algo com que muitas pessoas se preocupam e houve muitas tentativas de natureza semelhante, bem como alguns com desenhos bastante diferentes. E, neste caso, esta plataforma específica já está sendo utilizada de forma significativa:</p>
 <p><img src="../../../../images/collusion-files/screenie.png" /></p>
 <p>Alguns meses atrás, o subreddit sobre negociações na Ethereum <a href="http://reddit.com/r/ethtrader">/r/ethtrader</a> introduziu um recurso experimental pouco similar onde é emitido um token chamado "donuts" para usuários que fazem comentários que recebem um voto favorito, com uma quantidade definida de doações semanais para os usuários, proporcionais ao número de votos positivos que seus comentários receberam. Os donuts poderiam ser usados para comprar o direito de definir o conteúdo do banner no topo do subreddit, e poderiam também ser utilizados para votar nas sondagens comunitárias. No entanto, ao contrário do que acontece no sistema KEY, aqui as recompensas que B recebe quando A vota favoravelmente a B não são proporcionais à oferta existente de moeda de A. Em vez disso, cada conta Reddit tem a mesma capacidade de contribuir para outras contas do Reddit.</p>
 <p><img src="../../../../images/collusion-files/donuts.png" /></p>
@@ -73,7 +119,7 @@ MathJax = {
 <li>Eles <strong>subsidiam plutocracia </strong>, já que indivíduos muito ricos e cartéis ainda podem obter fundos suficientes para votar em si.</li>
 <li>Eles podem ser contornados pelos usuários <strong><em>subornando</em></strong> outros usuários para votar neles em massa.</li>
 </ul>
-<p>Ataques de suborno podem parecer distantes (quem aqui já aceitou um suborno na vida real?!), mas num ecossistema maduro isso é muito mais realista do que parece. Na maioria dos <a href="https://vitalik.ca/general/2017/12/17/voting.html">contextos onde o suborno ocorreu</a> no mundo blockchain, os operadores usam um novo nome eufemista para dar ao conceito um rosto amigável: não é um suborno, é um "pool de depósitos" que "partilha dividendos". Subornos podem até ser ofuscados: imaginem uma bolsa de criptomoedas que oferece taxas zero e gasta o esforço para fazer uma interface de usuário anormalmente boa e nem sequer tenta obter lucros. Em vez disso, utiliza as moedas que os clientes depositam para participar em vários sistemas de votação de moedas. Também haverá, inevitavelmente, pessoas que vêem a cumplicidade no grupo como simplesmente normal; veja um recente escândalo <a href="https://twitter.com/MapleLeafCap/status/1044958643731533825">envolvendo EOS DPOS</a> por exemplo:</p>
+<p>Ataques de suborno podem parecer distantes (quem aqui já aceitou um suborno na vida real?!), mas num ecossistema maduro isso é muito mais realista do que parece. Na maioria dos <a href="../../../2017/12/17/voting.html">contextos onde o suborno ocorreu</a> no mundo blockchain, os operadores usam um novo nome eufemista para dar ao conceito um rosto amigável: não é um suborno, é um "pool de depósitos" que "partilha dividendos". Subornos podem até ser ofuscados: imaginem uma bolsa de criptomoedas que oferece taxas zero e gasta o esforço para fazer uma interface de usuário anormalmente boa e nem sequer tenta obter lucros. Em vez disso, utiliza as moedas que os clientes depositam para participar em vários sistemas de votação de moedas. Também haverá, inevitavelmente, pessoas que vêem a cumplicidade no grupo como simplesmente normal; veja um recente escândalo <a href="https://twitter.com/MapleLeafCap/status/1044958643731533825">envolvendo EOS DPOS</a> por exemplo:</p>
 <p><img src="../../../../images/collusion-files/mapleleaf1.png" /></p>
 <p><img src="../../../../images/collusion-files/mapleleaf2.png" /></p>
 <p>Por último, existe a possibilidade de um "suborno negativo", chantagem ou coação, ameaçando os participantes com danos, a menos que atuem dentro do mecanismo de uma certa maneira. No experimento /r/ethtrader, o medo de que as pessoas entrem e <em>comprem</em> donuts para mudar as sondagens de governança levaram a comunidade a decidir fazer apenas trancado (ex. não negociáveis) donuts elegíveis para uso na votação. Mas há um ataque ainda mais barato do que comprar donuts (um ataque que pode ser considerado como um tipo de suborno ofuscado): <em>alugando</em> eles. Se um invasor já estiver segurando ETH, eles podem usá-lo como garantia em uma plataforma como <a href="https://compound.finance/">Compound</a> para contrair um empréstimo de algum token, dando a você todo o direito de usar esse token para qualquer fim, incluindo participar de votos, e quando eles estão feitos, eles simplesmente enviam os tokens de volta ao contrato de empréstimo para obter suas garantias de volta - tudo sem terem que suportar nem um segundo de exposição de preços para o token que eles usavam apenas para balançar um voto de moeda, mesmo que o mecanismo de voto em moedas inclua um tempo de bloqueio (por exemplo o que o Bihu faz). Em todos os casos, as questões relacionadas com o suborno e, acidentalmente, com o excesso de poder dos participantes bem conectados e ricos, são surpreendentemente difíceis de evitar. <strong>Identidade</strong> Alguns sistemas tentam mitigar os aspectos plutocráticos dos votos das moedas, fazendo uso de um sistema de identidade. No caso do sistema de donut /r/ethtrader, por exemplo, embora <em>sondagens de governança</em> sejam feitas via votação de moedas, o mecanismo que determina <em>quantos donuts&lt;/0&gt; (no caso moedas) você recebe no primeiro lugar</em> é baseado em contas do Reddit: 1 voto a favor de 1 conta Reddit = N donuts ganhados. O objetivo ideal de um sistema de identidade é tornar relativamente fácil para os indivíduos obter uma identidade, mas relativamente difícil de conseguir muitas identidades. No sistema de donut /r/ethtrader, isso é contas Reddit, no gadget de verificação Gitcoin CLR são contas do Github que são usadas para o mesmo propósito. Mas a identidade, pelo menos na forma como tem sido aplicada até agora, é uma coisa frágil....</p>

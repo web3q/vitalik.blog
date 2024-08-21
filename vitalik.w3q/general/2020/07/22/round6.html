@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
 
 <script type="text/x-mathjax-config">
@@ -50,6 +51,51 @@ MathJax = {
 
 <div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
 
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
 
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Gitcoin Grants Round 6 Retrospective" />
@@ -69,7 +115,7 @@ MathJax = {
 <img src="../../../../images/round6/tech.jpg" style="width:350px" /> <img src="../../../../images/round6/community.jpg" style="width:350px" /> <br>
 </center>
 <h3 id="stability-of-income">Stability of income</h3>
-<p>In the last round, one <a href="https://vitalik.ca/general/2020/04/30/round5.html">concern I raised</a> was stability of income. People trying to earn a livelihood off of quadratic funding grants would want to have some guarantee that their income isn't going to completely disappear in the next round just because the hive mind suddenly gets excited about something else.</p>
+<p>In the last round, one <a href="../../../2020/04/30/round5.html">concern I raised</a> was stability of income. People trying to earn a livelihood off of quadratic funding grants would want to have some guarantee that their income isn't going to completely disappear in the next round just because the hive mind suddenly gets excited about something else.</p>
 <p>Round 6 had two mechanisms to try to provide more stability of income:</p>
 <ol type="1">
 <li>A "shopping cart" interface for giving many contributions, with an explicit "repeat your contributions from the last round" feature</li>
@@ -95,7 +141,7 @@ MathJax = {
 <p>Many people in the Ethereum community are very excited about this proposal, though so far there has been fairly little funding toward getting it implemented. This gitcoin grant was a large community effort toward fixing this.</p>
 <p>The grant had quite a few very large contributions, including roughly $2,400 each from myself and Eric Conner, early on. Early in the round, one could clearly see the EIP 1559 community grant having an abnormally low ratio of matched funds to contributed funds; it was somewhere around $4k matched to $20k contributed. This was because while the amount contributed was large, it came from relatively few wealthier donors, and so the matching amount was less than it would have been had the same quantity of funds come from more diverse sources - the quadratic funding formula working as intended. However, a social media push advertising the grant then led to a large number of smaller contributors following along, which then quickly raised the match to its currently very high value ($35,578).</p>
 <h3 id="quadratic-signaling">Quadratic signaling</h3>
-<p>Unexpectedly, this grant proved to have a double function. First, it provided $65,473 of much-needed funding to EIP 1559 implementation. Second, it served as a credible community signal of the level of demand for the proposal. The Ethereum community has <a href="https://vitalik.ca/general/2017/12/17/voting.html">long been struggling</a> to find effective ways to determine what "the community" supports, especially in cases of controversy.</p>
+<p>Unexpectedly, this grant proved to have a double function. First, it provided $65,473 of much-needed funding to EIP 1559 implementation. Second, it served as a credible community signal of the level of demand for the proposal. The Ethereum community has <a href="../../../2017/12/17/voting.html">long been struggling</a> to find effective ways to determine what "the community" supports, especially in cases of controversy.</p>
 <p>Coin votes have been <a href="https://www.etherchain.org/coinvote">used in the past</a>, and have the advantage that they come with an answer to the key problem of determining who is a "real community member" - the answer is, your membership in the Ethereum community is proportional to how much ETH you have. However, they are plutocratic; in the famous DAO coin vote, a single "yes" voter voted with more ETH than all "no" voters put together (~20% of the total).</p>
 <center>
 <img src="../../../../images/round6/daocoinvote.png" style="width:350px" />
@@ -104,7 +150,7 @@ MathJax = {
 <p>The alternative, looking at github, reddit and twitter comments and votes to measure sentiment (sometimes derided as "proof of social media") is egalitarian, but it is easily exploitable, comes with no skin-in-the-game, and frequently falls under criticisms of "foreign interference" (are those <em>really</em> ethereum community members disagreeing with the proposal, or just those dastardly bitcoiners coming in from across the pond to stir up trouble?).</p>
 <p>Quadratic funding falls perfectly in the middle: the need to contribute monetary value to vote ensures that the votes of those who <em>really</em> care about the project count more than the votes of less-concerned outsiders, and the square-root function ensures that the votes of individual ultra-wealthy "whales" cannot beat out a poorer, but broader, coalition.</p>
 <center>
-<img src="../../../../images/round6/quadraticpayments.png" style="width:600px" /><br><br><small><i>A diagram from my <a href="https://vitalik.ca/general/2019/12/07/quadratic.html">post on quadratic payments</a> showing how quadratic payments is "in the middle" between the extremes of voting-like systems and money-like systems, and avoids the worst flaws of both.</i></small>
+<img src="../../../../images/round6/quadraticpayments.png" style="width:600px" class="padded" /><br><br><small><i>A diagram from my <a href="../../../2019/12/07/quadratic.html">post on quadratic payments</a> showing how quadratic payments is "in the middle" between the extremes of voting-like systems and money-like systems, and avoids the worst flaws of both.</i></small>
 </center>
 <p><br></p>
 <p>This raises the question: might it make sense to try to use explicit quadratic <em>voting</em> (with the ability to vote "yes" or "no" to a proposal) as an additional signaling tool to determine community sentiment for ethereum protocol proposals?</p>

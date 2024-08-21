@@ -28,6 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../../../../css/fretboard.f32f2a8d5293869f0195.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty.0ae3265014f89d9850bf.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/pretty-vendor.83ac49e057c3eac4fce3.css">
+<link rel="stylesheet" type="text/css" href="../../../../css/global.css">
 <link rel="stylesheet" type="text/css" href="../../../../css/misc.css">
 
 <script type="text/x-mathjax-config">
@@ -50,6 +51,51 @@ MathJax = {
 
 <div id="doc" class="container-fluid markdown-body comment-enabled" data-hard-breaks="true">
 
+<div id="color-mode-switch">
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+  </svg>
+  <input type="checkbox" id="switch" />
+  <label for="switch">Dark Mode Toggle</label>
+  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+  </svg>
+</div>
+
+<script type="text/javascript">
+  // Update root html class to set CSS colors
+  const toggleDarkMode = () => {
+    const root = document.querySelector('html');
+    root.classList.toggle('dark');
+  }
+
+  // Update local storage value for colorScheme
+  const toggleColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    if (colorScheme === 'light') localStorage.setItem('colorScheme', 'dark');
+    else localStorage.setItem('colorScheme', 'light');
+  }
+
+  // Set toggle input handler
+  const toggle = document.querySelector('#color-mode-switch input[type="checkbox"]');
+  if (toggle) toggle.onclick = () => {
+    toggleDarkMode();
+    toggleColorScheme();
+  }
+
+  // Check for color scheme on init
+  const checkColorScheme = () => {
+    const colorScheme = localStorage.getItem('colorScheme');
+    // Default to light for first view
+    if (colorScheme === null || colorScheme === undefined) localStorage.setItem('colorScheme', 'light');
+    // If previously saved to dark, toggle switch and update colors
+    if (colorScheme === 'dark') {
+      toggle.checked = true;
+      toggleDarkMode();
+    }
+  }
+  checkColorScheme();
+</script>
 
 <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="On Nathan Schneider on the limits of cryptoeconomics" />
@@ -63,7 +109,7 @@ MathJax = {
 <br> <br> <br>
 <title> On Nathan Schneider on the limits of cryptoeconomics </title>
 
-<p>Nathan Schneider has recently released <a href="https://osf.io/wzf85/?view_only=a10581ae9a804aa197ac39ebbba05766">an article</a> describing his perspectives on cryptoeconomics, and particularly on the limits of cryptoeconomic approaches to governance and what cryptoeconomics could be augmented with to improve its usefulness. This is, of course, a topic that is dear to me (<a href="https://vitalik.ca/general/2021/08/16/voting3.html">[1]</a> <a href="https://vitalik.ca/general/2020/09/11/coordination.html">[2]</a> <a href="https://vitalik.ca/general/2019/04/03/collusion.html">[3]</a> <a href="https://vitalik.ca/general/2018/03/28/plutocracy.html">[4]</a> <a href="https://vitalik.ca/general/2017/12/17/voting.html">[5]</a>), so it is heartening to see someone else take the blockchain space seriously as an intellectual tradition and engage with the issues from a different and unique perspective.</p>
+<p>Nathan Schneider has recently released <a href="https://osf.io/wzf85/?view_only=a10581ae9a804aa197ac39ebbba05766">an article</a> describing his perspectives on cryptoeconomics, and particularly on the limits of cryptoeconomic approaches to governance and what cryptoeconomics could be augmented with to improve its usefulness. This is, of course, a topic that is dear to me (<a href="../../../2021/08/16/voting3.html">[1]</a> <a href="../../../2020/09/11/coordination.html">[2]</a> <a href="../../../2019/04/03/collusion.html">[3]</a> <a href="../../../2018/03/28/plutocracy.html">[4]</a> <a href="../../../2017/12/17/voting.html">[5]</a>), so it is heartening to see someone else take the blockchain space seriously as an intellectual tradition and engage with the issues from a different and unique perspective.</p>
 <p>The main question that Nathan's piece is trying to explore is simple. There is a large body of intellectual work that criticizes a bubble of concepts that they refer to as "economization", "neoliberalism" and similar terms, arguing that they corrode democratic political values and leave many people's needs unmet as a result. The world of cryptocurrency is very economic (lots of tokens flying around everywhere, with lots of functions being assigned to those tokens), very neo (the space is 12 years old!) and very liberal (freedom and voluntary participation are core to the whole thing). Do these critiques also apply to blockchain systems? If so, what conclusions should we draw, and how could blockchain systems be designed to account for these critiques? Nathan's answer: more hybrid approaches combining ideas from both economics and politics. But what will it actually take to achieve that, and will it give the results that we want? My answer: yes, but there's a lot of subtleties involved.</p>
 <h2 id="what-are-the-critiques-of-neoliberalism-and-economic-logic">What are the critiques of neoliberalism and economic logic?</h2>
 <p>Near the beginning of Nathan's piece, he describes the critiques of overuse of economic logic briefly. That said, he does not go much further into the underlying critiques himself, preferring to point to other sources that have already covered the issue in depth:</p>
@@ -94,27 +140,27 @@ MathJax = {
 <p>I disagree with some, agree with others. I have always been suspicious of criticism of "crass and unethical commercialization", because it frequently feels like the author is attempting to launder their own feelings of disgust and aesthetic preferences into grand ethical and political ideologies - a sin common among all such ideologies, often the right (<a href="https://mobile.twitter.com/RokoMijic/status/1339321092238929920">random example here</a>) even more than the left. Back in the days when I had much less money and would sometimes walk a full hour to the airport to avoid a taxi fare, I remember thinking that I would love to get compensated for donating blood or using my body for clinical trials. And so to me, the idea that such transactions are inhuman exploitation has never been appealing.</p>
 <p>But at the same time, I am far from a <a href="https://cdn.mises.org/Defending_the_Undefendable_2018.pdf">Walter Block-style defender</a> of <em>all</em> locally-voluntary two-party commerce. I've written up my own viewpoints expressing similar concerns to parts of Wendy Brown's list in various articles:</p>
 <ul>
-<li><a href="https://vitalik.ca/general/2018/03/28/plutocracy.html">Multiple</a> pieces <a href="https://vitalik.ca/general/2019/04/03/collusion.html">decrying</a> the evils of vote buying, or even <a href="https://vitalik.ca/general/2021/08/16/voting3.html">financialized governance generally</a></li>
-<li>The <a href="https://vitalik.ca/general/2019/12/07/quadratic.html">importance</a> of <a href="https://share.transistor.fm/s/0f9aa81e">public goods funding</a>.</li>
-<li>Failure modes in financial markets due to <a href="https://vitalik.ca/general/2021/02/18/election.html">subtle issues like capital efficiency</a>.</li>
+<li><a href="../../../2018/03/28/plutocracy.html">Multiple</a> pieces <a href="../../../2019/04/03/collusion.html">decrying</a> the evils of vote buying, or even <a href="../../../2021/08/16/voting3.html">financialized governance generally</a></li>
+<li>The <a href="../../../2019/12/07/quadratic.html">importance</a> of <a href="https://share.transistor.fm/s/0f9aa81e">public goods funding</a>.</li>
+<li>Failure modes in financial markets due to <a href="../../../2021/02/18/election.html">subtle issues like capital efficiency</a>.</li>
 </ul>
 <p>So where does <em>my own</em> opposition to mixing finance and governance come from? This is a complicated topic, and my conclusions are in large part a result of my own failure after years of attempts to <em>find</em> a financialized governance mechanism that is economically stable. So here goes...</p>
 <h2 id="finance-is-the-absence-of-collusion-prevention">Finance is the absence of collusion prevention</h2>
 <p>Out of the standard assumptions in what gets pejoratively called "spherical cow economics", people normally tend to focus on the unrealistic nature of <em>perfect information</em> and <em>perfect rationality</em>. But the unrealistic assumption that is hidden in the list that strikes me as even more misleading is <em>individual choice</em>: the idea that each agent is separately making their own decisions, no agent has a positive or negative stake in another agent's outcomes, and there are no "side games"; the only thing that sees each agent's decisions is the black box that we call "the mechanism".</p>
 <center>
-<p><img src="../../../../images/limits/spherical_cow.png" /></p>
+<p><img src="../../../../images/limits/spherical_cow.png" class="padded" /></p>
 </center>
 <p>This assumption is often used to bootstrap complex contraptions such as <a href="https://en.wikipedia.org/wiki/Vickrey%E2%80%93Clarke%E2%80%93Groves_mechanism">the VCG mechanism</a>, whose theoretical optimality is based on beautiful arguments that because the price each player pays only depends on <em>other players' bids</em>, each player has no incentive to make a bid that does not reflect their true value in order to manipulate the price. A beautiful argument in theory, but it breaks down completely once you introduce the possibility that even two of the players are either allies or adversaries outside the mechanism.</p>
 <p>Economics, and economics-inspired philosophy, is great at describing the complexities that arise when the number of players "playing the game" increases from one to two (see the tale of Crusoe and Friday in Murray Rothbard's <a href="https://mises.org/library/crusoe-social-philosophy">The Ethics of Liberty</a> for one example). But what this philosophical tradition completely misses is that going up to <em>three</em> players adds an even further layer of complexity. In an interaction between two people, the two can ignore each other, fight or trade. In an interaction between three people, there exists a new strategy: any two of the three can communicate and band together to gang up on the third. Three is the smallest denominator where it's possible to talk about a 51%+ attack that has someone outside the clique to be a victim.</p>
-<p><strong>When there's only two people, more coordination can only be good. But once there's three people, the wrong kind of coordination <a href="https://vitalik.ca/general/2020/09/11/coordination.html">can be harmful</a>, and techniques to <em>prevent</em> harmful coordination (<a href="https://vitalik.ca/general/2017/05/08/coordination_problems.html">including decentralization itself</a>) can become very valuable. And it's this management of coordination that is the essence of "politics".</strong></p>
+<p><strong>When there's only two people, more coordination can only be good. But once there's three people, the wrong kind of coordination <a href="../../../2020/09/11/coordination.html">can be harmful</a>, and techniques to <em>prevent</em> harmful coordination (<a href="../../../2017/05/08/coordination_problems.html">including decentralization itself</a>) can become very valuable. And it's this management of coordination that is the essence of "politics".</strong></p>
 <center>
 <p><br></p>
-<p><img src="../../../../images/round4-files/threelayer.png" /></p>
+<p><img src="../../../../images/round4-files/threelayer.png" class="padded" /></p>
 <p><br><small><i>Going from two people to three introduces the possibility of harms from unbalanced coordination: it's not just "the individual versus the group", it's "the individual versus the group versus the world". </i></small><br><br></p>
 </center>
 <p>Now, we can understand try to use this framework to understand the pitfalls of "finance". <strong>Finance can be viewed as a set of patterns that naturally emerge in many kinds of systems that do not attempt to prevent collusion.</strong> Any system which <em>claims</em> to be non-finance, but does not actually make an effort to prevent collusion, will eventually acquire the characteristics of finance, if not something worse. To see why this is the case, compare two point systems we are all familiar with: money, and Twitter likes. Both kinds of points are valuable for extrinsic reasons, both have inevitably become status symbols, and both are number games where people spend a lot of time optimizing to try to get a higher score. And yet, they behave very differently. So what's the fundamental difference between the two?</p>
 <p>The answer is simple: it's the lack of an efficient market to enable agreements like "I like your tweet if you like mine", or "I like your tweet if you pay me in some other currency". If such a market existed and was easy to use, Twitter would collapse completely (something like hyperinflation would happen, with the likely outcome that everyone would run automated bots that like every tweet to claim rewards), and even the likes-for-money markets that exist illicitly <em>today</em> are a big problem for Twitter. With money, however, "I send X to you if you send Y to me" is not an <em>attack vector</em>, it's just a boring old currency exchange transaction. A Twitter clone that does not prevent like-for-like markets would "hyperinflate" into everyone liking everything, and if that Twitter clone tried to stop the hyperinflation by limiting the number of likes each user can make, the likes would behave like a currency, and the end result would behave the same as if Twitter just added a tipping feature.</p>
-<p>So what's the problem with finance? Well, if finance is optimized and structured collusion, then we can look for places where finance causes problems by using our existing economic tools to understand which mechanisms break if you introduce collusion! Unfortunately, governance by voting is a central example of this category; I've covered why in the <a href="https://vitalik.ca/general/2021/08/16/voting3.html#degov-is-dangerous">"moving beyond coin voting governance" post</a> and <a href="https://vitalik.ca/general/2018/03/28/plutocracy.html">many</a> other <a href="https://vitalik.ca/general/2019/04/03/collusion.html">occasions</a>. Even worse, cooperative game theory suggests that there might be <a href="https://vitalik.ca/general/2020/09/11/coordination.html#understanding-the-game-theory">no possible way to make a fully collusion-resistant governance mechanism</a>.</p>
+<p>So what's the problem with finance? Well, if finance is optimized and structured collusion, then we can look for places where finance causes problems by using our existing economic tools to understand which mechanisms break if you introduce collusion! Unfortunately, governance by voting is a central example of this category; I've covered why in the <a href="../../../2021/08/16/voting3.html#degov-is-dangerous">"moving beyond coin voting governance" post</a> and <a href="../../../2018/03/28/plutocracy.html">many</a> other <a href="../../../2019/04/03/collusion.html">occasions</a>. Even worse, cooperative game theory suggests that there might be <a href="../../../2020/09/11/coordination.html#understanding-the-game-theory">no possible way to make a fully collusion-resistant governance mechanism</a>.</p>
 <p>And so we get the fundamental conundrum: the cypherpunk spirit is fundamentally about making maximally immutable systems that work with as little information as possible about who is participating ("on the internet, nobody knows you're a dog"), but making new forms of <em>governance</em> requires the system to have richer information about its participants and ability to dynamically respond to attacks in order to remain stable in the face of actors with unforeseen incentives. Failure to do this means that everything looks like finance, which means, well.... perennial over-representation of concentrated interests, and all the problems that come as a result.</p>
 <center>
 <p><br></p>
@@ -127,7 +173,7 @@ MathJax = {
 <blockquote>
 <p>The jurors stood to earn rewards by correctly choosing the answer that they expected other jurors to independently select. This process implements the "Schelling point" concept in game theory (Aouidef et al., 2021; Dylag &amp; Smith, 2021). Such a jury does not deliberate, does not seek a common good together; its members unite through self-interest. Before coming to the jury, the factual basis of the case was supposed to come not from official organs or respected news organizations but from anonymous users similarly disciplined by reward-seeking. The prediction market itself was premised on the supposition that people make better forecasts when they stand to gain or lose the equivalent of money in the process. The politics of the presidential election in question, here, had been thoroughly transmuted into a cluster of economies.</p>
 </blockquote>
-<p>The implicit critique is clear: the Kleros court is ultimately motivated to make decisions not on the basis of their "true" correctness or incorrectness, but rather on the basis of their financial interests. If Kleros is deciding whether Biden or Trump won the 2020 election, and one Kleros juror really likes Trump, precommits to voting in his favor, and bribes other jurors to vote the same way, other jurors are likely to fall in line because of Kleros's conformity incentives: jurors are rewarded if their vote agrees with the majority vote, and penalized otherwise. The theoretical answer to this is the right to exit: if the majority of Kleros jurors vote to proclaim that Trump won the election, a minority can spin off a fork of Kleros where Biden is considered to have won, and their fork may well get a higher market price than the original. Sometimes, <a href="https://vitalik.ca/general/2021/03/23/legitimacy.html#coins-can-be-owned-by-social-contracts">this actually works</a>! But, as Nathan points out, it is not always so simple:</p>
+<p>The implicit critique is clear: the Kleros court is ultimately motivated to make decisions not on the basis of their "true" correctness or incorrectness, but rather on the basis of their financial interests. If Kleros is deciding whether Biden or Trump won the 2020 election, and one Kleros juror really likes Trump, precommits to voting in his favor, and bribes other jurors to vote the same way, other jurors are likely to fall in line because of Kleros's conformity incentives: jurors are rewarded if their vote agrees with the majority vote, and penalized otherwise. The theoretical answer to this is the right to exit: if the majority of Kleros jurors vote to proclaim that Trump won the election, a minority can spin off a fork of Kleros where Biden is considered to have won, and their fork may well get a higher market price than the original. Sometimes, <a href="../../../2021/03/23/legitimacy.html#coins-can-be-owned-by-social-contracts">this actually works</a>! But, as Nathan points out, it is not always so simple:</p>
 <blockquote>
 <p>But exit may not be as easy as it appears, whether it be from a social-media network or a protocol. The persistent dominance of early-to-market blockchains like Bitcoin and Ethereum suggests that cryptoeconomics similarly favors incumbency.</p>
 </blockquote>
@@ -154,7 +200,7 @@ MathJax = {
 <p>According to a slogan that appears repeatedly in 1Hive discussions, "Come for the honey, stay for the bees." That is, although economics figures prominently as one first encounters and explores 1Hive, participants understand the community's primary value as interpersonal, social, and non-economic.</p>
 </blockquote>
 <p>I am personally skeptical of the latter approach: it can work well in low-economic-value communities that are fun oriented, but if such an approach is attempted in a more serious system with widely open participation and enough at stake to invite determined attack, it will not survive for long. As I wrote above, "any system which <em>claims</em> to be non-finance, but does not actually make an effort to prevent collusion, will eventually acquire the characteristics of finance".</p>
-<p><strong>[Edit/correction 2021.09.27: it has been brought to my attention that in addition to culture, financialization <a href="https://gardens.substack.com/p/introducing-gardens">is limited by</a> (i) conviction voting, and (ii) juries enforcing a covenant. I'm skeptical of conviction voting in the long run; many DAOs use it today, but in the long term it can be <a href="https://vitalik.ca/general/2021/08/16/voting3.html#coin-votings-deep-fundamental-vulnerability-to-attackers-vote-buying">defeated by wrapper tokens</a>. The covenant, on the other hand, is interesting. My fault for not checking in more detail.]</strong></p>
+<p><strong>[Edit/correction 2021.09.27: it has been brought to my attention that in addition to culture, financialization <a href="https://gardens.substack.com/p/introducing-gardens">is limited by</a> (i) conviction voting, and (ii) juries enforcing a covenant. I'm skeptical of conviction voting in the long run; many DAOs use it today, but in the long term it can be <a href="../../../2021/08/16/voting3.html#coin-votings-deep-fundamental-vulnerability-to-attackers-vote-buying">defeated by wrapper tokens</a>. The covenant, on the other hand, is interesting. My fault for not checking in more detail.]</strong></p>
 <br>
 <center>
 <p><img src="../../../../images/limits/honey.png" /></p>
@@ -189,11 +235,11 @@ MathJax = {
 </blockquote>
 <p>I broadly agree with both conclusions. The language of collusion prevention can be helpful for understanding <em>why</em> cryptoeconomic purism so severely constricts the design space. "Finance" is a category of patterns that emerge when systems do not attempt to prevent collusion. When a system does not prevent collusion, it cannot treat different individuals differently, or even different <em>numbers</em> of individuals differently: whenever a "position" to exert influence exists, the owner of that position can just sell it to the highest bidder.</p>
 <center>
-<p><img src="../../../../images/limits/gavels.png" style="width:600px" /><br><br></p>
+<p><img src="../../../../images/limits/gavels.png" style="width:600px" class="padded" /><br><br></p>
 <p><em>Gavels on Amazon. A world where these were NFTs that actually came with associated judging power may well be a fun one, but I would certainly not want to be a defendant!</em></p>
 </center>
 <p><br></p>
 <p>The language of <a href="https://medium.com/@VitalikButerin/a-proof-of-stake-design-philosophy-506585978d51">defense-focused design</a>, on the other hand, is an underrated way to think about where some of the <em>advantages</em> of blockchain-based designs can be. Nation state systems often deal with threats with one of two totalizing mentalities: <em>closed borders</em> vs <em>conquer the world</em>. A closed borders approach attempts to make hard distinctions between an "inside" that the system <em>can</em> regulate and an "outside" that the system cannot, severely restricting flow between the inside and the outside. Conquer-the-world approaches attempt to extraterritorialize a nation state's preferences, seeking a state of affairs where there is no place in the entire world where some undesired activity can happen. Blockchains are structurally unable to take either approach, and so they must seek alternatives.</p>
-<p>Fortunately, blockchains do have one very powerful tool in their grasp that makes security under such porous conditions actually feasible: <em>cryptography</em>. Cryptography allows everyone to verify that some governance procedure was executed exactly according to the rules. It leaves a verifiable evidence trail of all actions, though zero knowledge proofs allow mechanism designers freedom in picking and choosing exactly what evidence is visible and what evidence is not. Cryptography can even <a href="https://vitalik.ca/general/2021/05/25/voting2.html">prevent collusion</a>! Blockchains allow applications to live on a substrate that their governacne does not control, which allows them to effectively implement techniques such as, for example, ensure that every change to the rules only takes effect with a 60 day delay. Finally, freedom to fork is much more practical, and forking is much lower in economic and human cost, than most centralized systems.</p>
+<p>Fortunately, blockchains do have one very powerful tool in their grasp that makes security under such porous conditions actually feasible: <em>cryptography</em>. Cryptography allows everyone to verify that some governance procedure was executed exactly according to the rules. It leaves a verifiable evidence trail of all actions, though zero knowledge proofs allow mechanism designers freedom in picking and choosing exactly what evidence is visible and what evidence is not. Cryptography can even <a href="../../../2021/05/25/voting2.html">prevent collusion</a>! Blockchains allow applications to live on a substrate that their governacne does not control, which allows them to effectively implement techniques such as, for example, ensure that every change to the rules only takes effect with a 60 day delay. Finally, freedom to fork is much more practical, and forking is much lower in economic and human cost, than most centralized systems.</p>
 <p>Blockchain-based contraptions have a lot to offer the world that other kinds of systems do not. On the other hand, Nathan is completely correct to emphasize that <em>blockchainized</em> should not be equated with <em>financialized</em>. There is plenty of room for blockchain-based systems that do not look like money, and indeed we need more of them.</p>
  </div> 
